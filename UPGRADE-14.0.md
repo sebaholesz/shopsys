@@ -107,6 +107,8 @@ Follow the instructions in relevant sections, e.g. `shopsys/coding-standards` or
     -   see #project-base-diff to update your project
 -   re-enable phing target cron ([#2875](https://github.com/shopsys/shopsys/pull/2875))
     -   see #project-base-diff to update your project
+-   prevent duplicate color parameters in data fixtures ([#2911](https://github.com/shopsys/shopsys/pull/2911))
+    - see #project-base-diff to update your project
 
 ### Storefront
 

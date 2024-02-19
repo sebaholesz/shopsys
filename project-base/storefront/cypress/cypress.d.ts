@@ -11,6 +11,7 @@ declare global {
                 pickupPlaceIdentifier?: string,
             ): Cypress.Chainable<Cypress.Response<any>>;
             preselectPaymentForTest(paymentUuid: string): Cypress.Chainable<Cypress.Response<any>>;
+            registerAsNewUser(registrationInput: RegistrationDataInputApi): Cypress.Chainable<Cypress.Response<any>>;
 
             setDevicePixelRatio(
                 pixelRatio: number,

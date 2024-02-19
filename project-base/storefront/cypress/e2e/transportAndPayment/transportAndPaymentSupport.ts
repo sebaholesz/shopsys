@@ -1,5 +1,4 @@
 import {
-    OpeningHoursFragmentApi,
     OpeningHoursOfDayApi,
     TransportWithAvailablePaymentsAndStoresFragmentApi,
 } from '../../../graphql/generated/index';

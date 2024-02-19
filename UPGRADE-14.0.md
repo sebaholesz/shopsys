@@ -1775,3 +1775,8 @@ Follow the instructions in relevant sections, e.g. `shopsys/coding-standards` or
         -   they were renamed to `tid` everywhere, so you should do the same
     -   as the docker setup for running acceptance tests was improved, makefile commands (`run-acceptance-tests-base` and `run-acceptance-tests-actual`) should be used to run tests
     -   add `closeOnClick` to all toast messages, as even though this should not be necessary (it is the default option), it does not work without it
+
+-   refactoring of order pages access logic ([#3032](https://github.com/shopsys/shopsys/pull/3032))
+    -   to handle access management on order pages, use the new `useOrderPagesAccess` hook, which handles both loading state and possible redirects
+    -   there was a bug with manual cache updates for mutations which are deduplicated, to fix this for any other mutations you might have, follow the example added to `graphcache.md`
+    -   move all your cypress API custom commands to `/cypress/support/api.ts`

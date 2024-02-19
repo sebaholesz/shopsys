@@ -11,6 +11,7 @@ import {
     AddOrderItemsToCartMutationVariablesApi,
     RemoveProductListMutationVariablesApi,
     ProductListInputApi,
+    MakeMaybe,
     RemoveProductFromListMutationVariablesApi,
     AddProductToListMutationVariablesApi,
     ProductListQueryDocumentApi,
@@ -68,19 +69,29 @@ export const cacheUpdates: UpdatesConfig = {
         ) {
             manuallyUpdateCartQuery(cache, result.AddOrderItemsToCart, result.AddOrderItemsToCart.uuid);
         },
+        // Because we use dedup on this mutation, if the mutation is cancelled
+        // mid-flight, it calls this updater with the resulting object being null,
+        // even though it should not happen
         ChangeTransportInCart(
-            result: ChangeTransportInCartMutationApi,
+            result: MakeMaybe<ChangeTransportInCartMutationApi, 'ChangeTransportInCart'>,
             _args: ChangeTransportInCartMutationVariablesApi,
             cache,
         ) {
-            manuallyUpdateCartQuery(cache, result.ChangeTransportInCart, result.ChangeTransportInCart.uuid);
+            if (result.ChangeTransportInCart?.uuid) {
+                manuallyUpdateCartQuery(cache, result.ChangeTransportInCart, result.ChangeTransportInCart.uuid);
+            }
         },
+        // Because we use dedup on this mutation, if the mutation is cancelled
+        // mid-flight, it calls this updater with the resulting object being null,
+        // even though it should not happen
         ChangePaymentInCart(
-            result: ChangePaymentInCartMutationApi,
+            result: MakeMaybe<ChangePaymentInCartMutationApi, 'ChangePaymentInCart'>,
             _args: ChangePaymentInCartMutationVariablesApi,
             cache,
         ) {
-            manuallyUpdateCartQuery(cache, result.ChangePaymentInCart, result.ChangePaymentInCart.uuid);
+            if (result.ChangePaymentInCart?.uuid) {
+                manuallyUpdateCartQuery(cache, result.ChangePaymentInCart, result.ChangePaymentInCart.uuid);
+            }
         },
         RemoveFromCart(result: RemoveFromCartMutationApi, _args: RemoveFromCartMutationVariablesApi, cache) {
             manuallyUpdateCartQuery(cache, result.RemoveFromCart, result.RemoveFromCart.uuid);

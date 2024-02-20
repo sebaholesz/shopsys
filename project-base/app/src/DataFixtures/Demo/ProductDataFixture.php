@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures\Demo;
 
+use App\DataFixtures\Demo\ProductDataProvider\ProductSetDataHelper;
 use App\Model\Product\Parameter\ParameterDataFactory;
 use App\Model\Product\Parameter\ParameterFacade;
 use App\Model\Product\Parameter\ParameterGroupDataFactory;
@@ -130,8 +131,11 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         private readonly StockRepository $stockRepository,
         private readonly ProductStockDataFactory $productStockDataFactory,
         private readonly EntityManagerInterface $em,
+        private readonly ProductSetDataHelper $productSetDataHelper,
     ) {
     }
+
+
 
     /**
      * @param \Doctrine\Persistence\ObjectManager $manager
@@ -140,14 +144,20 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
     {
         $this->domain->switchDomainById(Domain::FIRST_DOMAIN_ID);
 
+        $productData = $this->productSetDataHelper->createProductData(
+            '9177759',
+            '2891.7',
+            300,
+            'SLE 22F46DM4',
+            '8845781245930',
+            3000,
+        );
+        $this->createProduct($productData);
+
+
         /** @var \App\Model\Product\ProductData $productData */
         $productData = $this->productDataFactory->create();
 
-        $productData->catnum = '9177759';
-        $productData->partno = 'SLE 22F46DM4';
-        $productData->ean = '8845781245930';
-        $this->set0rderingPriority($productData, 1);
-        $productData->weight = 3000;
 
         $parameterTranslations = [];
 
@@ -169,25 +179,11 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
             $this->addParameterTranslations($parameterTranslations, t('Resolution', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale), t('1920×1080 (Full HD)', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale), $locale, $i, t('Main information', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale));
             $this->addParameterTranslations($parameterTranslations, t('USB', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale), t('Yes', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale), $locale, $i, t('Connection method', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale));
             $this->addParameterTranslations($parameterTranslations, t('HDMI', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale), t('Yes', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale), $locale, $i, t('Connection method', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale));
-
-            $productData->shortDescriptionUsp1ByDomainId[$domain->getId()] = t('Hello Kitty approved', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale);
-            $productData->shortDescriptionUsp2ByDomainId[$domain->getId()] = t('Immersive Full HD resolution', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale);
-            $productData->shortDescriptionUsp3ByDomainId[$domain->getId()] = t('Energy-Efficient Design', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale);
-            $productData->shortDescriptionUsp4ByDomainId[$domain->getId()] = t('Wide Color Gamut', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale);
-            $productData->shortDescriptionUsp5ByDomainId[$domain->getId()] = t('Adaptive Sync Technology', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $locale);
         }
 
         $this->setParametersByTranslations($productData, $parameterTranslations);
 
-        $this->setVat($productData, VatDataFixture::VAT_HIGH);
-        $this->setPriceForAllPricingGroups($productData, '2891.7');
-
         $this->setSellingFrom($productData, '16.1.2000');
-        $this->setSellingTo($productData, null);
-        $productData->usingStock = true;
-        $productData->stockQuantity = 300;
-        $productData->outOfStockAction = Product::OUT_OF_STOCK_ACTION_HIDE;
-        $this->setStocksQuantity($productData, 300);
 
         $this->setUnit($productData, UnitDataFixture::UNIT_PIECES);
         $this->setAvailability($productData, AvailabilityDataFixture::AVAILABILITY_IN_STOCK);
@@ -203,7 +199,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         $this->setBrand($productData, BrandDataFixture::BRAND_SENCOR);
 
         $this->createProduct($productData);
-
+/************************************************************************************************************************************************************************************************************************************************/
         $productData = $this->productDataFactory->create();
 
         $productData->catnum = '9176508';
@@ -3054,7 +3050,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         $productData->catnum = '9176544MS';
         $productData->partno = 'TIC100';
         $productData->ean = '8845781243207';
-        $this->set0rderingPriority($productData, 2);
+        $this->set0rderingPriority($productData, 2, $this);
 
         foreach ($this->domain->getAllIncludingDomainConfigsWithoutDataCreated() as $domain) {
             $locale = $domain->getLocale();
@@ -3183,7 +3179,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         $productData->catnum = '9176578';
         $productData->partno = 'T27D590EY';
         $productData->ean = '8845781243205';
-        $this->set0rderingPriority($productData, 1);
+        $this->set0rderingPriority($productData, 1, $this);
 
         $parameterTranslations = [];
 
@@ -3272,7 +3268,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         $productData->catnum = '7700769';
         $productData->partno = '22MT44D';
         $productData->ean = '8845781245931';
-        $this->set0rderingPriority($productData, 1);
+        $this->set0rderingPriority($productData, 1, $this);
 
         $parameterTranslations = [];
 
@@ -3397,7 +3393,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         $productData->catnum = '8981537';
         $productData->partno = 'T27D590EY';
         $productData->ean = '8845781245939';
-        $this->set0rderingPriority($productData, 1);
+        $this->set0rderingPriority($productData, 1, $this);
 
         $parameterTranslations = [];
 
@@ -3442,7 +3438,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
         $productData->catnum = '8981538';
         $productData->partno = 'T27D590EZ';
         $productData->ean = '8845781245940';
-        $this->set0rderingPriority($productData, 1);
+        $this->set0rderingPriority($productData, 1, $this);
 
         $parameterTranslations = [];
 

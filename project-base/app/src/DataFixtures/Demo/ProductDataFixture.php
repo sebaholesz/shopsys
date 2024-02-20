@@ -18,6 +18,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Generator;
+use Ramsey\Uuid\Uuid;
 use Shopsys\FrameworkBundle\Component\DataFixture\AbstractReferenceFixture;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Money\Money;
@@ -138,6 +139,8 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
      */
     public function load(ObjectManager $manager): void
     {
+        Uuid::setFactory(new UuidFactory());
+
         $this->domain->switchDomainById(Domain::FIRST_DOMAIN_ID);
 
         /** @var \App\Model\Product\ProductData $productData */
@@ -6092,7 +6095,7 @@ class ProductDataFixture extends AbstractReferenceFixture implements DependentFi
      */
     private function createProduct(ProductData $productData): Product
     {
-        $productData->uuid = array_pop($this->uuidPool);
+        //$productData->uuid = array_pop($this->uuidPool);
 
         $product = $this->productFacade->create($productData);
 

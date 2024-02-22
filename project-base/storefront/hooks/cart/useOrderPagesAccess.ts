@@ -8,28 +8,24 @@ export const useOrderPagesAccess = (page: 'transport-and-payment' | 'contact-inf
     const router = useRouter();
     const { cart, isFetching } = useCurrentCart();
     const { url } = useDomainConfig();
-    const [canContentBeDisplayed, setCanContentBeDisplayed] = useState(false);
+    const [canContentBeDisplayed, setCanContentBeDisplayed] = useState<boolean | undefined>(undefined);
     const [cartUrl, transportAndPaymentUrl] = getInternationalizedStaticUrls(
         ['/cart', '/order/transport-and-payment'],
         url,
     );
 
-    const handleOrderPagesAccess = () => {
-        if (cart === undefined || isFetching) {
-            return;
-        }
-
-        if (cart === null || !cart.items.length) {
-            router.replace(cartUrl);
-        } else if (page === 'contact-information' && (!cart.transport || !cart.payment)) {
-            router.replace(transportAndPaymentUrl);
-        } else {
-            setCanContentBeDisplayed(true);
-        }
-    };
-
     useEffect(() => {
-        handleOrderPagesAccess();
+        if (cart !== undefined && !isFetching) {
+            if (cart === null || !cart.items.length) {
+                setCanContentBeDisplayed(false);
+                router.replace(cartUrl);
+            } else if (page === 'contact-information' && (!cart.transport || !cart.payment)) {
+                setCanContentBeDisplayed(false);
+                router.replace(transportAndPaymentUrl);
+            } else {
+                setCanContentBeDisplayed(true);
+            }
+        }
     }, [cart, isFetching]);
 
     return canContentBeDisplayed;

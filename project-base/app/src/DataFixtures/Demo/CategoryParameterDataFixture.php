@@ -51,8 +51,8 @@ class CategoryParameterDataFixture extends AbstractReferenceFixture implements D
 
             if ($category === $categoryElectronics) {
                 $parametersCollapsed = [
-                    $this->getReference(ParameterDataFixture::PARAMETER_PREFIX . t('HDMI', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $firstDomainLocale)),
-                    $this->getReference(ParameterDataFixture::PARAMETER_PREFIX . t('Screen size', [], Translator::DATA_FIXTURES_TRANSLATION_DOMAIN, $firstDomainLocale)),
+                    $this->getReference(ParameterDataFixture::PARAM_HDMI),
+                    $this->getReference(ParameterDataFixture::PARAM_SCREEN_SIZE),
                 ];
             }
             $this->categoryParameterFacade->saveRelation($category, $parametersId, $parametersCollapsed);

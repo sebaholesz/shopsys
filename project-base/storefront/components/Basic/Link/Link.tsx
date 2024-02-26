@@ -17,7 +17,7 @@ type LinkProps = NativePropsAnchor & {
     size?: 'small';
 };
 
-export const Link: FC<LinkProps> = ({ isExternal, isButton, children, href, rel, target, className }) => {
+export const Link: FC<LinkProps> = ({ isExternal, isButton, children, href, rel, target, className, tid }) => {
     const classNameTwClass = twMergeCustom(
         'inline-flex cursor-pointer items-center text-greyDark outline-none hover:text-primary',
         isButton ? 'no-underline hover:no-underline' : 'underline hover:underline',
@@ -28,7 +28,7 @@ export const Link: FC<LinkProps> = ({ isExternal, isButton, children, href, rel,
         href: isExternal ? href : undefined,
         rel,
         target,
-        tid: TIDs.basic_link,
+        tid: tid ?? TIDs.basic_link,
     };
 
     const content = isButton ? <Button className={className}>{children}</Button> : children;

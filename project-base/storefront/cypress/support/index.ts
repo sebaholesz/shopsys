@@ -36,12 +36,21 @@ compareSnapshotCommand({
     capture: 'fullPage',
 });
 
-export const checkAndHideSuccessToast = () => {
-    cy.getByTID([TIDs.toast_success]).should('exist').click().should('not.exist');
+export const checkAndHideSuccessToast = (text?: string) => {
+    if (text) {
+        cy.getByTID([TIDs.toast_success]).should('contain', text).click().should('not.exist');
+    } else {
+        cy.getByTID([TIDs.toast_success]).should('exist').click().should('not.exist');
+    }
 };
 
 export const checkUrl = (url: string) => {
     cy.url().should('contain', url);
+};
+
+export const goToEditProfileFromHeader = () => {
+    cy.getByTID([TIDs.my_account_link]).should('be.visible').realHover();
+    cy.getByTID([TIDs.header_edit_profile_link]).should('be.visible').click();
 };
 
 export const checkLoaderOverlayIsNotVisible = (timeout?: number) => {

@@ -7,6 +7,7 @@ import { Form } from 'components/Forms/Form/Form';
 import { FormLine } from 'components/Forms/Lib/FormLine';
 import { PasswordInputControlled } from 'components/Forms/TextInput/PasswordInputControlled';
 import { TextInputControlled } from 'components/Forms/TextInput/TextInputControlled';
+import { TIDs } from 'cypress/tids';
 import { GtmMessageOriginType } from 'gtm/types/enums';
 import { blurInput } from 'helpers/forms/blurInput';
 import { handleFormErrors } from 'helpers/forms/handleFormErrors';
@@ -111,7 +112,7 @@ export const Login: FC<LoginProps> = ({ defaultEmail, shouldOverwriteCustomerUse
                     {t('Your addresses prefilled and you can check your order history.')}
                 </p>
 
-                <Link isButton href={registrationUrl}>
+                <Link isButton href={registrationUrl} tid={TIDs.login_popup_register_button}>
                     {t('Register')}
                 </Link>
             </div>

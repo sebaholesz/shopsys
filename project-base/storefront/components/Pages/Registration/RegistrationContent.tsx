@@ -8,6 +8,7 @@ import { CheckboxControlled } from 'components/Forms/Checkbox/CheckboxControlled
 import { Form } from 'components/Forms/Form/Form';
 import { ChoiceFormLine } from 'components/Forms/Lib/ChoiceFormLine';
 import { SimpleLayout } from 'components/Layout/SimpleLayout/SimpleLayout';
+import { TIDs } from 'cypress/tids';
 import { GtmMessageOriginType } from 'gtm/types/enums';
 import { blurInput } from 'helpers/forms/blurInput';
 import { clearForm } from 'helpers/forms/clearForm';
@@ -100,7 +101,7 @@ export const RegistrationContent: FC = () => {
                             }}
                         />
                         <div className="mt-8 flex w-full justify-center">
-                            <SubmitButton>{t('Sign up')}</SubmitButton>
+                            <SubmitButton tid={TIDs.registration_submit_button}>{t('Sign up')}</SubmitButton>
                         </div>
                     </Form>
                 </FormProvider>

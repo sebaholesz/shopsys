@@ -34,7 +34,7 @@ describe('Contact information page tests', () => {
     });
 
     it('should redirect to cart page and not display contact information form if cart is empty and user is logged in', () => {
-        cy.registerAsNewUser(generateCustomerRegistrationData());
+        cy.registerAsNewUser(generateCustomerRegistrationData('commonCustomer'));
         cy.visit(url.order.contactInformation);
 
         cy.getByTID([TIDs.order_content_wrapper_skeleton]).should('exist');
@@ -46,7 +46,7 @@ describe('Contact information page tests', () => {
     });
 
     it('should redirect to transport and payment select page and not display contact information form if transport and payment are not selected and user is logged in', () => {
-        cy.registerAsNewUser(generateCustomerRegistrationData());
+        cy.registerAsNewUser(generateCustomerRegistrationData('commonCustomer'));
         cy.addProductToCartForTest();
         cy.visit(url.order.contactInformation);
 

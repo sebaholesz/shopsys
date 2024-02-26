@@ -23,6 +23,13 @@ export const fillBillingAdressInThirdStep = (street: string, city: string, postC
         .type(postCode, { force: true });
 };
 
+export const fillRegistrationInfoAfterOrder = (password: string) => {
+    cy.get('#registration-after-order-form-password')
+        .should('have.attr', 'placeholder', placeholder.password)
+        .type(password);
+    cy.get('[for="registration-after-order-form-privacyPolicy"]').find('div').first().click();
+};
+
 export const clickOnSendOrderButton = () => {
     cy.getByTID([TIDs.blocks_orderaction_next]).click();
 };
@@ -46,4 +53,9 @@ export const checkFinishOrderPageAsUnloggedCustomerWithEmailWithExistingRegistra
 export const clickOnOrderDetailButtonOnThankYouPage = () => {
     cy.getByTID([TIDs.pages_orderconfirmation]).contains(link.orderDetail).click();
     cy.url().should('contain', url.order.orderDetail);
+};
+
+export const goToMyOrdersFromHeader = () => {
+    cy.getByTID([TIDs.my_account_link]).should('be.visible').realHover();
+    cy.getByTID([TIDs.header_my_orders_link]).should('be.visible').click();
 };

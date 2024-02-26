@@ -16,7 +16,7 @@ const showMessage = (message: string, type: 'info' | 'error' | 'success'): void 
                 style: { width: '100%' },
             });
         } else {
-            toast.error(() => <span dangerouslySetInnerHTML={{ __html: message }} />, {
+            toast.error(() => <span dangerouslySetInnerHTML={{ __html: message }} tid={TIDs.toast_error} />, {
                 toastId: message,
                 closeOnClick: true,
             });

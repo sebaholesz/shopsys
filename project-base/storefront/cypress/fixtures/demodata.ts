@@ -53,6 +53,10 @@ export const placeholder = {
     postCode: 'Postcode',
     coupone: 'Coupon',
     note: 'Note',
+    companyName: 'Company name',
+    companyNumber: 'Company number',
+    companyTaxNumber: 'Tax number',
+    passwordAgain: 'Password again',
 };
 
 export const products = {
@@ -73,7 +77,7 @@ export const products = {
     },
 } as const;
 
-export const quantityUnit = 'pc';
+export const promoCode = 'test';
 
 export const transport = {
     personalCollection: {
@@ -108,6 +112,7 @@ export const url = {
     loginWithCustomerRedirect: '/login?r=customer',
     customer: '/customer',
     categoryElectronics: '/electronics',
+    registration: '/registration',
 } as const;
 
 export const DEFAULT_APP_STORE = {

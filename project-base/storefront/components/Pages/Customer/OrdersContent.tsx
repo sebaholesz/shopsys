@@ -6,6 +6,7 @@ import { Pagination } from 'components/Blocks/Pagination/Pagination';
 import { SkeletonModuleCustomerOrders } from 'components/Blocks/Skeleton/SkeletonModuleCustomerOrders';
 import { Button } from 'components/Forms/Button/Button';
 import { Webline } from 'components/Layout/Webline/Webline';
+import { TIDs } from 'cypress/tids';
 import { ListedOrderFragmentApi } from 'graphql/generated';
 import { getInternationalizedStaticUrls } from 'helpers/getInternationalizedStaticUrls';
 import { useAddOrderItemsToCart } from 'hooks/cart/useAddOrderItemsToCart';
@@ -85,7 +86,7 @@ export const OrdersContent: FC<OrdersContentProps> = ({ isLoading, orders, total
                                     </Row>
                                 }
                             >
-                                {orders.map((order) => (
+                                {orders.map((order, index) => (
                                     <Row key={order.uuid}>
                                         <Cell>
                                             <ExtendedNextLink
@@ -129,6 +130,7 @@ export const OrdersContent: FC<OrdersContentProps> = ({ isLoading, orders, total
                                         </Cell>
                                         <Cell>
                                             <ExtendedNextLink
+                                                tid={TIDs.my_orders_link_ + index}
                                                 type="order"
                                                 href={{
                                                     pathname: customerOrderDetailUrl,

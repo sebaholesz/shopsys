@@ -8,7 +8,7 @@ import { customer1, DEFAULT_APP_STORE, url } from 'fixtures/demodata';
 import { checkAndHideSuccessToast, checkUrl } from 'support';
 import { TIDs } from 'tids';
 
-describe('Authentication tests', () => {
+describe('Login tests', () => {
     beforeEach(() => {
         cy.window().then((win) => {
             win.localStorage.setItem('app-store', JSON.stringify(DEFAULT_APP_STORE));

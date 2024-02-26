@@ -24,6 +24,10 @@ export const continueToTransportAndPaymentSelection = () => {
     cy.getByTID([TIDs.blocks_orderaction_next]).click();
 };
 
+export const goBackToCartPage = () => {
+    cy.getByTID([TIDs.blocks_orderaction_back]).click();
+};
+
 export const checkIfCorrectlyAddedHelloKittyToCart = () => {
     checkProductAndGoToCartFromCartPopupWindow(products.helloKitty.fullName);
     cy.getByTID([[TIDs.pages_cart_list_item_, 0], TIDs.pages_cart_list_item_name]).contains(

@@ -6,12 +6,16 @@ declare global {
             getByTID(value: ([TIDs, number] | TIDs)[]): Chainable<JQuery<HTMLElement>>;
             storeCartUuidInLocalStorage(cartUuid: string): Cypress.Chainable<undefined>;
             addProductToCartForTest(productUuid?: string, quantity?: number): Cypress.Chainable<any>;
+            addPromoCodeToCartForTest(promoCode: string): Cypress.Chainable<any>;
             preselectTransportForTest(
                 transportUuid: string,
                 pickupPlaceIdentifier?: string,
             ): Cypress.Chainable<Cypress.Response<any>>;
             preselectPaymentForTest(paymentUuid: string): Cypress.Chainable<Cypress.Response<any>>;
-            registerAsNewUser(registrationInput: RegistrationDataInputApi): Cypress.Chainable<Cypress.Response<any>>;
+            registerAsNewUser(
+                registrationInput: RegistrationDataInputApi,
+                shouldLogin?: boolean,
+            ): Cypress.Chainable<Cypress.Response<any>>;
 
             setDevicePixelRatio(
                 pixelRatio: number,

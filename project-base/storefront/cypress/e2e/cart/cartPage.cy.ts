@@ -4,9 +4,10 @@ import {
     checkCartTotalPrice,
     decreaseCartItemQuantityWithSpinbox,
     continueToTransportAndPaymentSelection,
+    goBackToCartPage,
 } from './cartSupport';
 import { products, url } from 'fixtures/demodata';
-import { checkLoaderOverlayIsNotVisible, checkUrl } from 'support';
+import { checkAndHideSuccessToast, checkLoaderOverlayIsNotVisible, checkUrl, takeSnapshotAndCompare } from 'support';
 import { TIDs } from 'tids';
 
 describe('Cart page tests', () => {
@@ -76,15 +77,23 @@ describe('Cart page tests', () => {
         cy.getByTID([TIDs.cart_page_empty_cart_text]).should('be.visible');
     });
 
-    it('should add and then remove promo code from cart', () => {
+    it('should add promo code to cart, check it, and then remove promo code from cart', () => {
         cy.getByTID([TIDs.blocks_promocode_add_button]).click();
         cy.get('#blocks-promocode-input').should('be.visible').type('test', { force: true });
         cy.getByTID([TIDs.blocks_promocode_apply_button]).click();
-        cy.getByTID([TIDs.blocks_promocode_promocodeinfo_code]).contains('test');
-        cy.getByTID([TIDs.pages_cart_cartpreview_discount]).contains('-€27.99');
-        checkCartTotalPrice('€647.53');
+        checkAndHideSuccessToast('Promo code was added to the order.');
+
+        takeSnapshotAndCompare('cart-page-with-applied-promo-code');
 
         continueToTransportAndPaymentSelection();
         checkUrl(url.order.transportAndPayment);
+        takeSnapshotAndCompare('transport-and-payment-page-with-applied-promo-code');
+
+        goBackToCartPage();
+        checkUrl(url.cart);
+        cy.getByTID([TIDs.blocks_promocode_promocodeinfo_code]).find('svg').click();
+        checkAndHideSuccessToast('Promo code was removed from the order.');
+
+        takeSnapshotAndCompare('cart-page-after-removing-promo-code');
     });
 });

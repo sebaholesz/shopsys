@@ -7,25 +7,25 @@ namespace Tests\App\Functional\Component\EntityLog;
 use App\DataFixtures\Demo\CountryDataFixture;
 use App\DataFixtures\Demo\CurrencyDataFixture;
 use App\DataFixtures\Demo\OrderStatusDataFixture;
+use App\Model\Cart\CartFacade;
 use App\Model\Order\OrderData;
 use App\Model\Order\OrderDataFactory;
 use App\Model\Order\OrderFacade;
-use App\Model\Order\Preview\OrderPreviewFactory;
 use App\Model\Order\Status\OrderStatus;
+use App\Model\Product\ProductRepository;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\EntityLog\Enum\EntityLogActionEnum;
 use Shopsys\FrameworkBundle\Component\EntityLog\Model\EntityLog;
 use Shopsys\FrameworkBundle\Component\EntityLog\Model\EntityLogFacade;
 use Shopsys\FrameworkBundle\Component\EntityLog\Model\EntityLogRepository;
-use Shopsys\FrameworkBundle\Model\Cart\CartFacade;
 use Shopsys\FrameworkBundle\Model\Country\Country;
+use Shopsys\FrameworkBundle\Model\Order\CreateOrderFacade;
 use Shopsys\FrameworkBundle\Model\Order\Item\OrderItemFacade;
-use Shopsys\FrameworkBundle\Model\Order\Item\QuantifiedProduct;
 use Shopsys\FrameworkBundle\Model\Order\Order;
 use Shopsys\FrameworkBundle\Model\Order\OrderRepository;
+use Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor;
 use Shopsys\FrameworkBundle\Model\Payment\PaymentRepository;
 use Shopsys\FrameworkBundle\Model\Pricing\Currency\Currency;
-use Shopsys\FrameworkBundle\Model\Product\ProductRepository;
 use Shopsys\FrameworkBundle\Model\Transport\TransportRepository;
 use Tests\App\Test\TransactionFunctionalTestCase;
 
@@ -44,7 +44,12 @@ class EntityLogTest extends TransactionFunctionalTestCase
     /**
      * @inject
      */
-    private OrderPreviewFactory $orderPreviewFactory;
+    private OrderProcessor $orderProcessor;
+
+    /**
+     * @inject
+     */
+    private CreateOrderFacade $createOrderFacade;
 
     /**
      * @inject
@@ -178,7 +183,7 @@ class EntityLogTest extends TransactionFunctionalTestCase
         $this->assertSame($newStatus->getName(), $log->getChangeSet()['status']['newReadableValue']);
     }
 
-    public function testEditCollectionEntity()
+    public function testEditCollectionEntity(): void
     {
         $productTicketName = '100 Czech crowns ticket';
 
@@ -263,7 +268,10 @@ class EntityLogTest extends TransactionFunctionalTestCase
     {
         $product = $this->productRepository->getById(1);
 
-        $this->cartFacade->addProductToCart($product->getId(), 1);
+        $cart = $this->cartFacade->getCartOfCurrentCustomerUserCreateIfNotExists();
+        $this->cartFacade->addProductToExistingCart($product, 1, $cart, true);
+
+        /** @todo Please, please just create an easy way how to create order with transport, payment, promocode etc. */
 
         /** @var \App\Model\Transport\Transport $transport */
         $transport = $this->transportRepository->getById(3);
@@ -298,14 +306,8 @@ class EntityLogTest extends TransactionFunctionalTestCase
         $orderData->domainId = Domain::FIRST_DOMAIN_ID;
         $orderData->currency = $this->getReference(CurrencyDataFixture::CURRENCY_CZK, Currency::class);
 
-        $orderPreview = $this->orderPreviewFactory->create(
-            $orderData->currency,
-            $orderData->domainId,
-            [new QuantifiedProduct($product, 1)],
-            $transport,
-            $payment,
-        );
+        $orderData = $this->orderProcessor->process($orderData, $cart, $this->domain->getDomainConfigById(Domain::FIRST_DOMAIN_ID));
 
-        return $this->orderFacade->createOrder($orderData, $orderPreview, null);
+        return $this->createOrderFacade->createOrder($orderData, null);
     }
 }

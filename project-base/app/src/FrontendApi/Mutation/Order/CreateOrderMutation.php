@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\FrontendApi\Mutation\Order;
 
-use App\Component\Deprecation\DeprecatedMethodException;
 use App\FrontendApi\Model\Cart\CartFacade;
 use App\FrontendApi\Model\Cart\CartWatcherFacade;
 use App\FrontendApi\Model\Order\CreateOrderResult;
@@ -15,15 +14,15 @@ use App\Model\Customer\DeliveryAddressFacade;
 use App\Model\Customer\User\CustomerUser;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Validator\InputValidator;
+use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Model\Customer\User\CurrentCustomerUser;
 use Shopsys\FrameworkBundle\Model\Order\Mail\OrderMailFacade;
-use Shopsys\FrameworkBundle\Model\Order\Order;
+use Shopsys\FrameworkBundle\Model\Order\CreateOrderFacade;
+use Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor;
 use Shopsys\FrontendApiBundle\Model\Mutation\Order\CreateOrderMutation as BaseCreateOrderMutation;
 use Shopsys\FrontendApiBundle\Model\Order\OrderDataFactory;
-use Shopsys\FrontendApiBundle\Model\Order\PlaceOrderFacade;
 
 /**
- * @property \App\FrontendApi\Model\Order\PlaceOrderFacade $placeOrderFacade
  * @property \App\FrontendApi\Model\Order\OrderDataFactory $orderDataFactory
  * @property \App\Model\Order\Mail\OrderMailFacade $orderMailFacade
  * @method sendEmail(\App\Model\Order\Order $order)
@@ -34,45 +33,32 @@ class CreateOrderMutation extends BaseCreateOrderMutation
 
     /**
      * @param \App\FrontendApi\Model\Order\OrderDataFactory $orderDataFactory
-     * @param \App\FrontendApi\Model\Order\PlaceOrderFacade $placeOrderFacade
      * @param \App\Model\Order\Mail\OrderMailFacade $orderMailFacade
      * @param \App\FrontendApi\Model\Cart\CartFacade $cartFacade
      * @param \App\Model\Customer\User\CurrentCustomerUser $currentCustomerUser
      * @param \App\Model\Customer\DeliveryAddressFacade $deliveryAddressFacade
      * @param \App\FrontendApi\Model\Cart\CartWatcherFacade $cartWatcherFacade
      * @param \App\FrontendApi\Model\Order\CreateOrderResultFactory $createOrderResultFactory
+     * @param \Shopsys\FrameworkBundle\Model\Order\CreateOrderFacade $newOrderFacade
+     * @param \Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor $orderProcessor
+     * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      */
     public function __construct(
         OrderDataFactory $orderDataFactory,
-        PlaceOrderFacade $placeOrderFacade,
         OrderMailFacade $orderMailFacade,
         private readonly CartFacade $cartFacade,
         private readonly CurrentCustomerUser $currentCustomerUser,
         private readonly DeliveryAddressFacade $deliveryAddressFacade,
         private readonly CartWatcherFacade $cartWatcherFacade,
         private readonly CreateOrderResultFactory $createOrderResultFactory,
+        private readonly CreateOrderFacade $newOrderFacade,
+        private readonly OrderProcessor $orderProcessor,
+        private readonly Domain $domain,
     ) {
-        parent::__construct($orderDataFactory, $placeOrderFacade, $orderMailFacade);
+        parent::__construct($orderDataFactory, $orderMailFacade);
     }
 
-    /**
-     * @deprecated Method is deprecated. Use "createOrderWithResultMutation()" instead.
-     * @param \Overblog\GraphQLBundle\Definition\Argument $argument
-     * @param \Overblog\GraphQLBundle\Validator\InputValidator $validator
-     * @return \App\Model\Order\Order
-     */
-    public function createOrderMutation(Argument $argument, InputValidator $validator): Order
-    {
-        throw new DeprecatedMethodException();
-    }
-
-    /**
-     * @param \Overblog\GraphQLBundle\Definition\Argument $argument
-     * @param \Overblog\GraphQLBundle\Validator\InputValidator $validator
-     * @throws \Overblog\GraphQLBundle\Validator\Exception\ArgumentsValidationException
-     * @return \App\FrontendApi\Model\Order\CreateOrderResult
-     */
-    public function createOrderWithResultMutation(Argument $argument, InputValidator $validator): CreateOrderResult
+    public function createOrderMutation(Argument $argument, InputValidator $validator): CreateOrderResult
     {
         $validationGroups = $this->computeValidationGroups($argument);
         $validator->validate($validationGroups);
@@ -94,21 +80,73 @@ class CreateOrderMutation extends BaseCreateOrderMutation
             );
         }
 
-        $this->orderDataFactory->updateOrderDataFromCart($orderData, $cart);
+        $orderData = $this->orderProcessor->process($orderData, $cart, $this->domain->getCurrentDomainConfig());
 
-        /** @var string|null $deliveryAddressUuid */
-        $deliveryAddressUuid = $input['deliveryAddressUuid'];
-        $deliveryAddress = $this->resolveDeliveryAddress($deliveryAddressUuid, $customerUser);
+        /** @var \App\Model\Order\Order $order */
+        $order = $this->newOrderFacade->createOrder($orderData, $customerUser);
 
-        $order = $this->placeOrderFacade->placeOrder(
-            $orderData,
-            $cart->getQuantifiedProducts(),
-            $cart->getFirstAppliedPromoCode(),
-            $deliveryAddress,
-        );
+        /**
+         * @todo think about how to attach more functionalities like edit customer user, subscribe to newsletter, dispatch message
+         * if ($customerUser instanceof CustomerUser) {
+         * $customerUserUpdateData = $this->customerUserUpdateDataFactory->createFromCustomerUser($customerUser);
+         * $customerUserUpdateData->customerUserData->newsletterSubscription = $orderData->newsletterSubscription;
+         * $this->customerUserFacade->editByCustomerUser($customerUser->getId(), $customerUserUpdateData);
+         * $deliveryAddress = $deliveryAddress ?? $this->createDeliveryAddressForAmendingCustomerUserData($order);
+         * $this->customerUserFacade->amendCustomerUserDataFromOrder($customerUser, $order, $deliveryAddress);
+         * } elseif ($orderData->newsletterSubscription) {
+         * $newsletterSubscriber = $this->newsletterFacade->findNewsletterSubscriberByEmailAndDomainId(
+         * $orderData->email,
+         * $this->domain->getId(),
+         * );
+         *
+         * if ($newsletterSubscriber === null) {
+         * $this->newsletterFacade->addSubscribedEmail($orderData->email, $this->domain->getId());
+         * }
+         * }
+         *
+         * $this->placedOrderMessageDispatcher->dispatchPlacedOrderMessage($order->getId());
+         *
+         *
+         * /**
+         * @param \App\Model\Order\Order $order
+         * @return \App\Model\Customer\DeliveryAddress|null
+         * /
+         * private function createDeliveryAddressForAmendingCustomerUserData(Order $order): ?DeliveryAddress
+         * {
+         * if (
+         * $order->getTransport()->isPersonalPickup() ||
+         * $order->getTransport()->isPacketery() ||
+         * $order->isDeliveryAddressSameAsBillingAddress()
+         * ) {
+         * return null;
+         * }
+         *
+         * $deliveryAddressData = $this->deliveryAddressDataFactory->create();
+         * $deliveryAddressData->firstName = $order->getDeliveryFirstName();
+         * $deliveryAddressData->lastName = $order->getDeliveryLastName();
+         * $deliveryAddressData->companyName = $order->getDeliveryCompanyName();
+         * $deliveryAddressData->street = $order->getDeliveryStreet();
+         * $deliveryAddressData->city = $order->getDeliveryCity();
+         * $deliveryAddressData->postcode = $order->getDeliveryPostcode();
+         * $deliveryAddressData->country = $order->getDeliveryCountry();
+         * $deliveryAddressData->postcode = $order->getDeliveryPostcode();
+         * $deliveryAddressData->customer = $order->getCustomerUser()->getCustomer();
+         *
+         * /** @var \App\Model\Customer\DeliveryAddress $deliveryAddress
+         * /
+        *
+        $deliveryAddress = $this->deliveryAddressFactory->create($deliveryAddressData);
+        *
+        *
+        return $deliveryAddress;
+        *
+    }
+         */
+
+        /* @todo uncomment
         $this->cartFacade->deleteCart($cart);
-
         $this->sendEmail($order);
+        */
 
         return $this->createOrderResultFactory->getCreateOrderResultByOrder($order);
     }

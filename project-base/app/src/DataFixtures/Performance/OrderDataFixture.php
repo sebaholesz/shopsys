@@ -27,7 +27,6 @@ use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserFacade;
 use Shopsys\FrameworkBundle\Model\Order\Item\QuantifiedProduct;
 use Shopsys\FrameworkBundle\Model\Order\OrderDataFactory;
 use Shopsys\FrameworkBundle\Model\Order\OrderFacade;
-use Shopsys\FrameworkBundle\Model\Order\Preview\OrderPreviewFactory;
 use Shopsys\FrameworkBundle\Model\Pricing\Currency\Currency;
 use Shopsys\FrameworkBundle\Model\Product\ProductFacade;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -60,7 +59,6 @@ class OrderDataFixture
      * @param \Faker\Generator $faker
      * @param \Shopsys\FrameworkBundle\Component\DataFixture\PersistentReferenceFacade $persistentReferenceFacade
      * @param \App\Model\Order\OrderFacade $orderFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
      * @param \App\Model\Product\ProductFacade $productFacade
      * @param \App\Model\Customer\User\CustomerUserFacade $customerUserFacade
      * @param \Shopsys\FrameworkBundle\Component\Console\ProgressBarFactory $progressBarFactory
@@ -74,7 +72,6 @@ class OrderDataFixture
         private readonly Faker $faker,
         private readonly PersistentReferenceFacade $persistentReferenceFacade,
         private readonly OrderFacade $orderFacade,
-        private readonly OrderPreviewFactory $orderPreviewFactory,
         private readonly ProductFacade $productFacade,
         private readonly CustomerUserFacade $customerUserFacade,
         private readonly ProgressBarFactory $progressBarFactory,

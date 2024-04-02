@@ -28,6 +28,7 @@ class OrderItemDataFactory
      */
     public function create(): OrderItemData
     {
+        /** @todo maybe add type immediately when creating */
         return $this->createInstance();
     }
 

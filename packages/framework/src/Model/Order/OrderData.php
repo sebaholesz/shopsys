@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Shopsys\FrameworkBundle\Model\Order;
 
+use Shopsys\FrameworkBundle\Component\Money\Money;
+use Shopsys\FrameworkBundle\Model\Order\Item\OrderItem;
+use Shopsys\FrameworkBundle\Model\Order\Item\OrderItemData;
+use Shopsys\FrameworkBundle\Model\Pricing\Price;
+
 class OrderData
 {
     public const NEW_ITEM_PREFIX = 'new_';
@@ -139,9 +144,15 @@ class OrderData
     public $note;
 
     /**
+     * @deprecated
      * @var \Shopsys\FrameworkBundle\Model\Order\Item\OrderItemData[]
      */
     public $itemsWithoutTransportAndPayment;
+
+    /**
+     * @var \Shopsys\FrameworkBundle\Model\Order\Item\OrderItemData[]
+     */
+    public $items = [];
 
     /**
      * @var \DateTime|null
@@ -193,11 +204,30 @@ class OrderData
      */
     public $paymentTransactionRefunds;
 
+    public Price $totalPrice;
+
+    /**
+     * @var array<string, \Shopsys\FrameworkBundle\Model\Pricing\Price>
+     */
+    public array $totalPriceByItemType = [];
+    /**
+     * @var string|null
+     */
+    public ?string $pickupPlaceIdentifier;
+    /**
+     * @var \Shopsys\FrameworkBundle\Model\Store\Store|null
+     */
+    public $personalPickupStore;
+
     public function __construct()
     {
         $this->itemsWithoutTransportAndPayment = [];
         $this->deliveryAddressSameAsBillingAddress = false;
         $this->paymentTransactionRefunds = [];
+
+        $this->totalPrice = new Price(Money::zero(), Money::zero());
+
+        $this->setZeroPricesForAllTypes();
     }
 
     /**
@@ -215,4 +245,34 @@ class OrderData
 
         return $newItemsWithoutTransportAndPayment;
     }
+
+    protected function setZeroPricesForAllTypes(): void
+    {
+        $this->totalPriceByItemType[OrderItem::TYPE_PRODUCT] = new Price(Money::zero(), Money::zero());
+        $this->totalPriceByItemType[OrderItem::TYPE_DISCOUNT] = new Price(Money::zero(), Money::zero());
+        $this->totalPriceByItemType[OrderItem::TYPE_PAYMENT] = new Price(Money::zero(), Money::zero());
+        $this->totalPriceByItemType[OrderItem::TYPE_TRANSPORT] = new Price(Money::zero(), Money::zero());
+        $this->totalPriceByItemType[OrderItem::TYPE_ROUNDING] = new Price(Money::zero(), Money::zero());
+    }
+
+    /**
+     * @param string $type
+     * @return \Shopsys\FrameworkBundle\Model\Order\Item\OrderItemData[]
+     */
+
+    public function getItemsByType(string $type): array
+    {
+        return array_filter(
+            $this->items,
+            fn (OrderItemData $item) => $item->type === $type,
+        );
+    }
+
+    /**
+     * @todo
+     * add methods for add totalprice
+     * update type total price
+     * add item
+     * maybe add prices by type – So I am able to know how much I have to pay for products, transport, payment, etc.
+     */
 }

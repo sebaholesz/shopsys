@@ -12,14 +12,16 @@ use App\FrontendApi\Model\Transport\TransportValidationFacade;
 use App\Model\Cart\Cart;
 use App\Model\Cart\Payment\CartPaymentFacade;
 use App\Model\Cart\Transport\CartTransportFacade;
-use App\Model\Order\Preview\OrderPreviewFactory;
+use App\Model\Order\Item\OrderItem;
+use App\Model\Order\OrderDataFactory;
 use App\Model\Payment\Payment;
 use App\Model\Payment\PaymentFacade;
 use App\Model\Transport\Transport;
 use App\Model\Transport\TransportFacade;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
-use Shopsys\FrameworkBundle\Model\Customer\User\CurrentCustomerUser;
-use Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade;
+use Shopsys\FrameworkBundle\Model\Order\OrderData;
+use Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor;
+use Shopsys\FrameworkBundle\Model\Pricing\Price;
 use Shopsys\FrameworkBundle\Model\Store\Exception\StoreByUuidNotFoundException;
 use Shopsys\FrameworkBundle\Model\TransportAndPayment\FreeTransportAndPaymentFacade;
 
@@ -28,30 +30,28 @@ class TransportAndPaymentWatcherFacade
     private CartWithModificationsResult $cartWithModificationsResult;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
      * @param \App\Model\Transport\TransportFacade $transportFacade
      * @param \App\Model\Payment\PaymentFacade $paymentFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
-     * @param \App\Model\Customer\User\CurrentCustomerUser $currentCustomerUser
      * @param \Shopsys\FrameworkBundle\Model\TransportAndPayment\FreeTransportAndPaymentFacade $freeTransportAndPaymentFacade
      * @param \App\Model\Cart\Transport\CartTransportFacade $cartTransportFacade
      * @param \App\FrontendApi\Model\Transport\TransportValidationFacade $transportValidationFacade
      * @param \App\Model\Cart\Payment\CartPaymentFacade $cartPaymentFacade
      * @param \App\FrontendApi\Model\Payment\PaymentValidationFacade $paymentValidationFacade
+     * @param \Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor $orderProcessor
+     * @param \App\Model\Order\OrderDataFactory $orderDataFactory
      */
     public function __construct(
-        private CurrencyFacade $currencyFacade,
-        private TransportFacade $transportFacade,
-        private PaymentFacade $paymentFacade,
-        private OrderPreviewFactory $orderPreviewFactory,
-        private Domain $domain,
-        private CurrentCustomerUser $currentCustomerUser,
-        private FreeTransportAndPaymentFacade $freeTransportAndPaymentFacade,
-        private CartTransportFacade $cartTransportFacade,
-        private TransportValidationFacade $transportValidationFacade,
-        private CartPaymentFacade $cartPaymentFacade,
-        private PaymentValidationFacade $paymentValidationFacade,
+        private readonly TransportFacade $transportFacade,
+        private readonly PaymentFacade $paymentFacade,
+        private readonly Domain $domain,
+        private readonly FreeTransportAndPaymentFacade $freeTransportAndPaymentFacade,
+        private readonly CartTransportFacade $cartTransportFacade,
+        private readonly TransportValidationFacade $transportValidationFacade,
+        private readonly CartPaymentFacade $cartPaymentFacade,
+        private readonly PaymentValidationFacade $paymentValidationFacade,
+        private readonly OrderProcessor $orderProcessor,
+        private readonly OrderDataFactory $orderDataFactory,
     ) {
     }
 
@@ -67,43 +67,45 @@ class TransportAndPaymentWatcherFacade
         $this->cartWithModificationsResult = $cartWithModificationsResult;
 
         $domainId = $this->domain->getId();
-        $currency = $this->currencyFacade->getDomainDefaultCurrencyByDomainId($domainId);
-        /** @var \App\Model\Customer\User\CustomerUser|null $customerUser */
-        $customerUser = $this->currentCustomerUser->findCurrentCustomerUser();
-        $transport = $cart->getTransport();
-        $payment = $cart->getPayment();
 
-        $orderPreview = $this->orderPreviewFactory->create(
-            $currency,
-            $domainId,
-            $cart->getQuantifiedProducts(),
-            $transport,
-            $payment,
-            $customerUser,
-            null,
-            null,
-            $cart->getFirstAppliedPromoCode(),
-        );
+        $orderData = $this->orderDataFactory->create();
+        $orderData = $this->orderProcessor->process($orderData, $cart, $this->domain->getCurrentDomainConfig());
+
+        $productsPrice = $orderData->totalPriceByItemType[OrderItem::TYPE_PRODUCT];
 
         if ($this->freeTransportAndPaymentFacade->isActive($domainId)) {
             $amountWithVatForFreeTransport = $this->freeTransportAndPaymentFacade->getRemainingPriceWithVat(
-                $orderPreview->getProductsPrice()->getPriceWithVat(),
+                $productsPrice->getPriceWithVat(),
                 $domainId,
             );
 
             $this->cartWithModificationsResult->setRemainingAmountWithVatForFreeTransport($amountWithVatForFreeTransport);
         }
 
-        $this->cartWithModificationsResult->setTotalPrice($orderPreview->getTotalPrice());
-        $this->cartWithModificationsResult->setTotalItemsPrice($orderPreview->getProductsPrice());
-        $this->cartWithModificationsResult->setTotalDiscountPrice($orderPreview->getTotalPriceDiscount());
-        $this->cartWithModificationsResult->setTotalPriceWithoutDiscountTransportAndPayment($orderPreview->getTotalPriceWithoutDiscountTransportAndPayment());
-        $this->cartWithModificationsResult->setRoundingPrice($orderPreview->getRoundingPrice());
+        $this->cartWithModificationsResult->setTotalPrice($orderData->totalPrice);
+        $this->cartWithModificationsResult->setTotalItemsPrice($productsPrice);
+        $this->cartWithModificationsResult->setTotalDiscountPrice($orderData->totalPriceByItemType[OrderItem::TYPE_DISCOUNT]);
+        $this->cartWithModificationsResult->setTotalPriceWithoutDiscountTransportAndPayment(
+            $this->calculatePriceWithoutDiscountTransportAndPayment($orderData)
+        );
+        $this->cartWithModificationsResult->setRoundingPrice($orderData->totalPriceByItemType[OrderItem::TYPE_ROUNDING]);
 
         $this->checkTransport($cart);
         $this->checkPayment($cart);
 
         return $this->cartWithModificationsResult;
+    }
+
+    /**
+     * @param \Shopsys\FrameworkBundle\Model\Order\OrderData $orderData
+     * @return \Shopsys\FrameworkBundle\Model\Pricing\Price
+     */
+    private function calculatePriceWithoutDiscountTransportAndPayment(OrderData $orderData): Price
+    {
+        return $orderData->totalPrice
+            ->subtract($orderData->totalPriceByItemType[OrderItem::TYPE_TRANSPORT])
+            ->subtract($orderData->totalPriceByItemType[OrderItem::TYPE_PAYMENT])
+            ->subtract($orderData->totalPriceByItemType[OrderItem::TYPE_DISCOUNT]);
     }
 
     /**
@@ -142,7 +144,7 @@ class TransportAndPaymentWatcherFacade
     {
         try {
             $this->transportValidationFacade->checkTransportWeightLimit($transport, $cart);
-        } catch (TransportWeightLimitExceededException $exception) {
+        } catch (TransportWeightLimitExceededException) {
             $this->cartWithModificationsResult->setTransportWeightLimitExceeded(true);
             $this->cartTransportFacade->unsetCartTransport($cart);
         }
@@ -156,7 +158,7 @@ class TransportAndPaymentWatcherFacade
     {
         try {
             $this->transportValidationFacade->checkPersonalPickupStoreAvailability($transport, $cart->getPickupPlaceIdentifier());
-        } catch (StoreByUuidNotFoundException $e) {
+        } catch (StoreByUuidNotFoundException) {
             $this->cartWithModificationsResult->setPersonalPickupStoreUnavailable(true);
             $this->cartTransportFacade->unsetPickupPlaceIdentifierFromCart($cart);
         }
@@ -170,6 +172,7 @@ class TransportAndPaymentWatcherFacade
         if ($cart->isEmpty()) {
             $this->cartTransportFacade->unsetCartTransport($cart);
         }
+
 
         $transport = $cart->getTransport();
 

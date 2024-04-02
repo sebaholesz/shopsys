@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\DataFixtures\Demo;
 
 use App\Model\Administrator\Administrator;
+use App\Model\Cart\Cart;
+use App\Model\Cart\Item\CartItem;
+use App\Model\Cart\Payment\CartPaymentData;
+use App\Model\Cart\Transport\CartTransportData;
 use App\Model\Order\Order;
 use App\Model\Order\Status\OrderStatus;
 use App\Model\Payment\Payment;
@@ -16,46 +20,46 @@ use Doctrine\Persistence\ObjectManager;
 use Ramsey\Uuid\Uuid;
 use Shopsys\FrameworkBundle\Component\DataFixture\AbstractReferenceFixture;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
+use Shopsys\FrameworkBundle\Component\Money\Money;
 use Shopsys\FrameworkBundle\Model\Country\Country;
 use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUser;
 use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserRepository;
-use Shopsys\FrameworkBundle\Model\Order\Item\QuantifiedProduct;
+use Shopsys\FrameworkBundle\Model\Order\CreateOrderFacade;
 use Shopsys\FrameworkBundle\Model\Order\OrderData;
 use Shopsys\FrameworkBundle\Model\Order\OrderDataFactory;
-use Shopsys\FrameworkBundle\Model\Order\OrderFacade;
-use Shopsys\FrameworkBundle\Model\Order\Preview\OrderPreviewFactory;
+use Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor;
 use Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade;
 
 class OrderDataFixture extends AbstractReferenceFixture implements DependentFixtureInterface
 {
     private const string UUID_NAMESPACE = '0338e624-c961-4475-a29d-c90080d02d1f';
-    public const ORDER_PREFIX = 'order_';
-    private const ORDER_WITH_GOPAY_PAYMENT_PREFIX = 'order_with_gopay_payment_';
-    public const ORDER_WITH_GOPAY_PAYMENT_1 = 'order_with_gopay_payment_1';
-    public const ORDER_WITH_GOPAY_PAYMENT_14 = 'order_with_gopay_payment_14';
+    public const string ORDER_PREFIX = 'order_';
+    private const string ORDER_WITH_GOPAY_PAYMENT_PREFIX = 'order_with_gopay_payment_';
+    public const string ORDER_WITH_GOPAY_PAYMENT_1 = 'order_with_gopay_payment_1';
+    public const string ORDER_WITH_GOPAY_PAYMENT_14 = 'order_with_gopay_payment_14';
 
     /**
      * @param \Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserRepository $customerUserRepository
-     * @param \App\Model\Order\OrderFacade $orderFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
+     * @param \Shopsys\FrameworkBundle\Model\Order\CreateOrderFacade $createOrderFacade
      * @param \App\Model\Order\OrderDataFactory $orderDataFactory
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
+     * @param \Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor $orderProcessor
      */
     public function __construct(
         private readonly CustomerUserRepository $customerUserRepository,
-        private readonly OrderFacade $orderFacade,
-        private readonly OrderPreviewFactory $orderPreviewFactory,
+        private readonly CreateOrderFacade $createOrderFacade,
         private readonly OrderDataFactory $orderDataFactory,
         private readonly Domain $domain,
         private readonly CurrencyFacade $currencyFacade,
+        private readonly OrderProcessor $orderProcessor,
     ) {
     }
 
     /**
      * @param \Doctrine\Persistence\ObjectManager $manager
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         foreach ($this->domain->getAll() as $domainConfig) {
             $domainId = $domainConfig->getId();
@@ -624,7 +628,7 @@ class OrderDataFixture extends AbstractReferenceFixture implements DependentFixt
     /**
      * @param int $domainId
      */
-    private function loadDistinct(int $domainId)
+    private function loadDistinct(int $domainId): void
     {
         $domainDefaultCurrency = $this->currencyFacade->getDomainDefaultCurrencyByDomainId($domainId);
 
@@ -774,7 +778,7 @@ class OrderDataFixture extends AbstractReferenceFixture implements DependentFixt
 
     /**
      * @param \App\Model\Order\OrderData $orderData
-     * @param array $products
+     * @param array<string, int> $products
      * @param \App\Model\Customer\User\CustomerUser|null $customerUser
      * @return \App\Model\Order\Order
      */
@@ -784,29 +788,37 @@ class OrderDataFixture extends AbstractReferenceFixture implements DependentFixt
         ?CustomerUser $customerUser = null,
     ): Order {
         $uniqueOrderHash = '';
-        $quantifiedProducts = [];
+
+        // @todo think of a way how to create order programmatically. Will be needed for imports too.
+
+        $cart = new Cart('cartIdentifier', $customerUser);
 
         foreach ($products as $productReferenceName => $quantity) {
             $product = $this->getReference($productReferenceName, Product::class);
-            $quantifiedProducts[] = new QuantifiedProduct($product, $quantity);
+            $cart->addItem(new CartItem($cart, $product, $quantity, Money::zero()));
             $uniqueOrderHash .= $product->getCatnum() . '-' . $quantity;
         }
 
-        $orderPreview = $this->orderPreviewFactory->create(
-            $orderData->currency,
-            $orderData->domainId,
-            $quantifiedProducts,
-            $orderData->transport,
-            $orderData->payment,
-            $customerUser,
-            null,
-        );
+        $cartPaymentData = new CartPaymentData();
+        $cartPaymentData->payment = $orderData->payment;
+        $cartPaymentData->watchedPrice = Money::zero();
+        $cartPaymentData->goPayBankSwift = null;
+        $cart->editCartPayment($cartPaymentData);
+
+        $cartTransportData = new CartTransportData();
+        $cartTransportData->transport = $orderData->transport;
+        $cartTransportData->watchedPrice = Money::zero();
+        $cartTransportData->pickupPlaceIdentifier = null;
+        $cart->editCartTransport($cartTransportData);
 
         $uniqueOrderHash .= $orderData->firstName . $orderData->lastName . $orderData->transport->getId() . $orderData->deliveryFirstName . $orderData->deliveryLastName;
         $orderData->uuid = Uuid::uuid5(self::UUID_NAMESPACE, md5($uniqueOrderHash))->toString();
 
+        $orderData = $this->orderProcessor->process($orderData, $cart, $this->domain->getDomainConfigById($orderData->domainId));
+
         /** @var \App\Model\Order\Order $order */
-        $order = $this->orderFacade->createOrder($orderData, $orderPreview, $customerUser);
+        $order = $this->createOrderFacade->createOrder($orderData, $customerUser);
+
         $referenceName = self::ORDER_PREFIX . $order->getId();
         $this->addReference($referenceName, $order);
 
@@ -816,7 +828,7 @@ class OrderDataFixture extends AbstractReferenceFixture implements DependentFixt
     /**
      * {@inheritdoc}
      */
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             ProductDataFixture::class,

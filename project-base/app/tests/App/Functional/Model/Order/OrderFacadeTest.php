@@ -7,19 +7,20 @@ namespace Tests\App\Functional\Model\Order;
 use App\DataFixtures\Demo\CountryDataFixture;
 use App\DataFixtures\Demo\CurrencyDataFixture;
 use App\DataFixtures\Demo\OrderStatusDataFixture;
+use App\Model\Cart\CartFacade;
 use App\Model\Order\Item\OrderItemData;
 use App\Model\Order\Order;
 use App\Model\Order\OrderData;
 use App\Model\Order\OrderDataFactory;
 use App\Model\Order\OrderFacade;
-use App\Model\Order\Preview\OrderPreviewFactory;
 use App\Model\Order\Status\OrderStatus;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Money\Money;
-use Shopsys\FrameworkBundle\Model\Cart\CartFacade;
 use Shopsys\FrameworkBundle\Model\Country\Country;
+use Shopsys\FrameworkBundle\Model\Order\CreateOrderFacade;
 use Shopsys\FrameworkBundle\Model\Order\Item\QuantifiedProduct;
 use Shopsys\FrameworkBundle\Model\Order\OrderRepository;
+use Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor;
 use Shopsys\FrameworkBundle\Model\Payment\PaymentRepository;
 use Shopsys\FrameworkBundle\Model\Pricing\Currency\Currency;
 use Shopsys\FrameworkBundle\Model\Product\ProductRepository;
@@ -32,16 +33,6 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
      * @inject
      */
     private CartFacade $cartFacade;
-
-    /**
-     * @inject
-     */
-    private OrderFacade $orderFacade;
-
-    /**
-     * @inject
-     */
-    private OrderPreviewFactory $orderPreviewFactory;
 
     /**
      * @inject
@@ -65,22 +56,34 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
 
     /**
      * @inject
-     * @phpstan-ignore-next-line Test is skipped
      */
     private OrderDataFactory $orderDataFactory;
 
+    /**
+     * @inject
+     */
+    private OrderProcessor $orderProcessor;
+
+    /**
+     * @inject
+     */
+    private CreateOrderFacade $createOrderFacade;
+
     public function testCreate()
     {
+        /** @var \App\Model\Product\Product $product */
         $product = $this->productRepository->getById(1);
 
-        $this->cartFacade->addProductToCart($product->getId(), 1);
+        $cart = $this->cartFacade->getCartOfCurrentCustomerUserCreateIfNotExists();
+
+        $this->cartFacade->addProductToExistingCart($product, 1, $cart, true);
 
         /** @var \App\Model\Transport\Transport $transport */
         $transport = $this->transportRepository->getById(3);
         /** @var \App\Model\Payment\Payment $payment */
         $payment = $this->paymentRepository->getById(1);
 
-        $orderData = new OrderData();
+        $orderData = $this->orderDataFactory->create();
         $orderData->transport = $transport;
         $orderData->payment = $payment;
         $orderData->status = $this->getReference(OrderStatusDataFixture::ORDER_STATUS_NEW, OrderStatus::class);
@@ -108,14 +111,8 @@ class OrderFacadeTest extends TransactionFunctionalTestCase
         $orderData->domainId = Domain::FIRST_DOMAIN_ID;
         $orderData->currency = $this->getReference(CurrencyDataFixture::CURRENCY_CZK, Currency::class);
 
-        $orderPreview = $this->orderPreviewFactory->create(
-            $orderData->currency,
-            $orderData->domainId,
-            [new QuantifiedProduct($product, 1)],
-            $transport,
-            $payment,
-        );
-        $order = $this->orderFacade->createOrder($orderData, $orderPreview, null);
+        $orderData = $this->orderProcessor->process($orderData, $cart, $this->domain->getDomainConfigById(Domain::FIRST_DOMAIN_ID));
+        $order = $this->createOrderFacade->createOrder($orderData, null);
 
         $orderFromDb = $this->orderRepository->getById($order->getId());
 

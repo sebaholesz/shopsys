@@ -10,7 +10,6 @@ use App\FrontendApi\Model\Transport\Exception\MissingPickupPlaceIdentifierExcept
 use App\FrontendApi\Model\Transport\Exception\TransportPriceChangedException;
 use App\FrontendApi\Model\Transport\Exception\TransportWeightLimitExceededException;
 use App\Model\Cart\Cart;
-use App\Model\Order\Preview\OrderPreviewFactory;
 use App\Model\Transport\Transport;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Model\Customer\User\CurrentCustomerUser;
@@ -23,7 +22,6 @@ class TransportValidationFacade
      * @param \Shopsys\FrameworkBundle\Model\Store\StoreFacade $storeFacade
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
      * @param \App\Model\Customer\User\CurrentCustomerUser $currentCustomerUser
      * @param \App\FrontendApi\Model\Cart\CartFacade $cartFacade
      */
@@ -31,7 +29,6 @@ class TransportValidationFacade
         private StoreFacade $storeFacade,
         private Domain $domain,
         private CurrencyFacade $currencyFacade,
-        private OrderPreviewFactory $orderPreviewFactory,
         private CurrentCustomerUser $currentCustomerUser,
         private CartFacade $cartFacade,
     ) {

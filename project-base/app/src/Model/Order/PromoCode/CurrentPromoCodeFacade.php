@@ -178,7 +178,7 @@ class CurrentPromoCodeFacade extends BaseCurrentPromoCodeFacade
 
         foreach ($cart->getItems() as $cartItem) {
             $productFromCart = $cartItem->getProduct();
-            $product = $this->productPromoCodeFiller->filterProductByPromoCodeFlags($productFromCart, $promoCode);
+            $product = $this->productPromoCodeFiller->filterProductByPromoCodeFlags($productFromCart, $promoCode, $this->domain->getId());
 
             if ($product !== null) {
                 $isValidPromoCode = true;

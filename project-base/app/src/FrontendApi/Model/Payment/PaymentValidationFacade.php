@@ -8,7 +8,6 @@ use App\FrontendApi\Model\Cart\CartFacade;
 use App\FrontendApi\Model\Payment\Exception\InvalidPaymentTransportCombinationException;
 use App\FrontendApi\Model\Payment\Exception\PaymentPriceChangedException;
 use App\Model\Cart\Cart;
-use App\Model\Order\Preview\OrderPreviewFactory;
 use App\Model\Payment\Payment;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Model\Customer\User\CurrentCustomerUser;
@@ -19,14 +18,12 @@ class PaymentValidationFacade
     /**
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
      * @param \App\Model\Customer\User\CurrentCustomerUser $currentCustomerUser
      * @param \App\FrontendApi\Model\Cart\CartFacade $cartFacade
      */
     public function __construct(
         private Domain $domain,
         private CurrencyFacade $currencyFacade,
-        private OrderPreviewFactory $orderPreviewFactory,
         private CurrentCustomerUser $currentCustomerUser,
         private CartFacade $cartFacade,
     ) {

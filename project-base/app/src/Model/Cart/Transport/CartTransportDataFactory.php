@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model\Cart\Transport;
 
 use App\Model\Cart\Cart;
-use App\Model\Order\Preview\OrderPreviewFactory;
 use App\Model\Transport\Transport;
 use App\Model\Transport\TransportFacade;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
@@ -21,7 +20,6 @@ class CartTransportDataFactory
      * @param \App\Model\Transport\TransportFacade $transportFacade
      * @param \App\Model\Customer\User\CurrentCustomerUser $currentCustomerUser
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
      * @param \Shopsys\FrameworkBundle\Model\Transport\TransportPriceCalculation $transportPriceCalculation
      */
     public function __construct(
@@ -29,7 +27,6 @@ class CartTransportDataFactory
         private TransportFacade $transportFacade,
         private CurrentCustomerUser $currentCustomerUser,
         private CurrencyFacade $currencyFacade,
-        private OrderPreviewFactory $orderPreviewFactory,
         private TransportPriceCalculation $transportPriceCalculation,
     ) {
     }

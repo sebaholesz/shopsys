@@ -18,10 +18,6 @@ use Shopsys\FrameworkBundle\Model\Order\OrderData as BaseOrderData;
  */
 class OrderData extends BaseOrderData
 {
-    /**
-     * @var \Shopsys\FrameworkBundle\Model\Store\Store|null
-     */
-    public $personalPickupStore;
 
     /**
      * @var string|null
@@ -42,11 +38,6 @@ class OrderData extends BaseOrderData
      * @var string|null
      */
     public ?string $trackingNumber;
-
-    /**
-     * @var string|null
-     */
-    public ?string $pickupPlaceIdentifier;
 
     /**
      * @var bool|null

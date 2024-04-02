@@ -1056,3 +1056,13 @@ services:
             - '%gopay_config%'
 
     Shopsys\FrameworkBundle\Model\Product\Elasticsearch\Scope\ProductExportScopeConfig: ~
+
+    Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessingStack:
+        arguments:
+            $processingMiddlewares:
+                - '@Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessorMiddleware\AddProductsMiddleware'
+                - '@Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessorMiddleware\AddTransportMiddleware'
+                - '@Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessorMiddleware\AddPaymentMiddleware'
+                - '@Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessorMiddleware\AddRoundingMiddleware'
+
+    Shopsys\FrameworkBundle\Model\Order\Processing\OrderProcessor: ~

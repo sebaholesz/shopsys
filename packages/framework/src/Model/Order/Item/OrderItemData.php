@@ -69,4 +69,14 @@ class OrderItemData
      * @var \Shopsys\FrameworkBundle\Model\Payment\Payment|null
      */
     public $payment;
+
+    /**
+     * @var string|null
+     */
+    public $type;
+
+    /**
+     * @var \Shopsys\FrameworkBundle\Model\Product\Product|null
+     */
+    public $product;
 }

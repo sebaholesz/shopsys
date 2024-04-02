@@ -31,29 +31,6 @@ use Shopsys\FrontendApiBundle\Model\Order\OrderDataFactory as BaseOrderDataFacto
 class OrderDataFactory extends BaseOrderDataFactory
 {
     /**
-     * @param \App\Model\Order\OrderDataFactory $orderDataFactory
-     * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
-     * @param \App\Model\Payment\PaymentFacade $paymentFacade
-     * @param \App\Model\Transport\TransportFacade $transportFacade
-     * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
-     * @param \Shopsys\FrameworkBundle\Model\Country\CountryFacade $countryFacade
-     * @param \App\Model\Product\ProductFacade $productFacade
-     * @param \Shopsys\FrameworkBundle\Model\Store\StoreFacade $storeFacade
-     */
-    public function __construct(
-        FrameworkOrderDataFactory $orderDataFactory,
-        Domain $domain,
-        PaymentFacade $paymentFacade,
-        TransportFacade $transportFacade,
-        CurrencyFacade $currencyFacade,
-        CountryFacade $countryFacade,
-        ProductFacade $productFacade,
-        private readonly StoreFacade $storeFacade,
-    ) {
-        parent::__construct($orderDataFactory, $domain, $paymentFacade, $transportFacade, $currencyFacade, $countryFacade, $productFacade);
-    }
-
-    /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $argument
      * @return \App\Model\Order\OrderData
      */
@@ -67,72 +44,6 @@ class OrderDataFactory extends BaseOrderDataFactory
         $orderData->newsletterSubscription = $input['newsletterSubscription'];
 
         return $orderData;
-    }
-
-    /**
-     * @param \App\Model\Order\OrderData $orderData
-     * @param \App\Model\Cart\Cart $cart
-     */
-    public function updateOrderDataFromCart(OrderData $orderData, Cart $cart): void
-    {
-        $orderData->payment = $cart->getPayment();
-        $orderData->transport = $cart->getTransport();
-        $orderData->goPayBankSwift = $cart->getPaymentGoPayBankSwift();
-        $pickupPlaceIdentifier = $cart->getPickupPlaceIdentifier();
-
-        if ($cart->getPickupPlaceIdentifier() === null) {
-            return;
-        }
-
-        if ($orderData->transport->isPersonalPickup()) {
-            try {
-                $store = $this->storeFacade->getByUuidAndDomainId(
-                    $pickupPlaceIdentifier,
-                    $this->domain->getId(),
-                );
-                $this->setOrderDataByStore($orderData, $store);
-            } catch (StoreByUuidNotFoundException $exception) {
-                throw new StoreNotFoundUserError($exception->getMessage());
-            }
-        }
-
-        if (
-            $orderData->transport->isPacketery() &&
-            $this->isPickupPlaceIdentifierIntegerInString($pickupPlaceIdentifier)
-        ) {
-            throw new InvalidPacketeryAddressIdUserError('Wrong packetery address ID');
-        }
-
-        $orderData->pickupPlaceIdentifier = $pickupPlaceIdentifier;
-    }
-
-    /**
-     * @param \App\Model\Order\OrderData $orderData
-     * @param \Shopsys\FrameworkBundle\Model\Store\Store $store
-     */
-    private function setOrderDataByStore(OrderData $orderData, Store $store): void
-    {
-        $orderData->personalPickupStore = $store;
-        $orderData->deliveryAddressSameAsBillingAddress = false;
-
-        $orderData->deliveryFirstName = $orderData->deliveryFirstName ?? $orderData->firstName;
-        $orderData->deliveryLastName = $orderData->deliveryLastName ?? $orderData->lastName;
-        $orderData->deliveryCompanyName = $orderData->deliveryCompanyName ?? $orderData->companyName;
-        $orderData->deliveryTelephone = $orderData->deliveryTelephone ?? $orderData->telephone;
-
-        $orderData->deliveryStreet = $store->getStreet();
-        $orderData->deliveryCity = $store->getCity();
-        $orderData->deliveryPostcode = $store->getPostcode();
-        $orderData->deliveryCountry = $store->getCountry();
-    }
-
-    /**
-     * @param string $pickupPlaceIdentifier
-     * @return bool
-     */
-    private function isPickupPlaceIdentifierIntegerInString(string $pickupPlaceIdentifier): bool
-    {
-        return (string)(int)$pickupPlaceIdentifier !== $pickupPlaceIdentifier;
     }
 
     /**

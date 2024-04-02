@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model\Cart\Payment;
 
 use App\Model\Cart\Cart;
-use App\Model\Order\Preview\OrderPreviewFactory;
 use App\Model\Payment\Payment;
 use App\Model\Payment\PaymentFacade;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
@@ -21,7 +20,6 @@ class CartPaymentDataFactory
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \App\Model\Customer\User\CurrentCustomerUser $currentCustomerUser
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
-     * @param \App\Model\Order\Preview\OrderPreviewFactory $orderPreviewFactory
      * @param \Shopsys\FrameworkBundle\Model\Payment\PaymentPriceCalculation $paymentPriceCalculation
      */
     public function __construct(
@@ -29,7 +27,6 @@ class CartPaymentDataFactory
         private Domain $domain,
         private CurrentCustomerUser $currentCustomerUser,
         private CurrencyFacade $currencyFacade,
-        private OrderPreviewFactory $orderPreviewFactory,
         private PaymentPriceCalculation $paymentPriceCalculation,
     ) {
     }

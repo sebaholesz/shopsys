@@ -2623,6 +2623,8 @@ export type SeoSetting = {
 /** Represents settings of the current domain */
 export type Settings = {
   __typename?: 'Settings';
+  /** Absolute URL of the blog root category */
+  blogUrl: Maybe<Scalars['String']['output']>;
   /** Main text for contact form */
   contactFormMainText: Scalars['String']['output'];
   /** Timezone that is used for displaying time */

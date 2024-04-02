@@ -24,3 +24,7 @@ SettingsDecorator:
                 type: String!
                 resolve: "@=query('displayTimezoneQuery')"
                 description: "Timezone that is used for displaying time"
+            blogUrl:
+                type: String
+                resolve: "@=query('blogUrlQuery')"
+                description: "Absolute URL of the blog root category"

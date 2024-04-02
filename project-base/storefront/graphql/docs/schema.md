@@ -7220,6 +7220,15 @@ Represents settings of the current domain
 </thead>
 <tbody>
 <tr>
+<td colspan="2" valign="top"><strong>blogUrl</strong></td>
+<td valign="top"><a href="#string">String</a></td>
+<td>
+
+Absolute URL of the blog root category
+
+</td>
+</tr>
+<tr>
 <td colspan="2" valign="top"><strong>contactFormMainText</strong></td>
 <td valign="top"><a href="#string">String</a>!</td>
 <td>

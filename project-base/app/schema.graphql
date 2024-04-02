@@ -2005,6 +2005,8 @@ type SeoSetting {
 
 "Represents settings of the current domain"
 type Settings {
+  "Absolute URL of the blog root category"
+  blogUrl: String
   "Main text for contact form"
   contactFormMainText: String!
   "Timezone that is used for displaying time"

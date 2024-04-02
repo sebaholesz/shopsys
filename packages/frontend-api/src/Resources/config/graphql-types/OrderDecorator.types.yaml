@@ -109,3 +109,12 @@ OrderDecorator:
             isPaid:
                 type: "Boolean!"
                 description: "Indicates whether the order is paid successfully with GoPay payment type"
+            pickupPlaceIdentifier:
+                type: "String"
+                description: "Selected pickup place identifier"
+            trackingNumber:
+                type: "String"
+                description: "The order tracking number"
+            trackingUrl:
+                type: "String"
+                description: "The order tracking link"

@@ -1056,3 +1056,19 @@ services:
             - '%gopay_config%'
 
     Shopsys\FrameworkBundle\Model\Product\Elasticsearch\Scope\ProductExportScopeConfig: ~
+
+    Shopsys\FrameworkBundle\Model\Order\PromoCode\ProductPromoCodeFiller: ~
+
+    Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeApplicableProductsTotalPriceCalculator: ~
+
+    Shopsys\FrameworkBundle\Component\Packetery\PacketeryConfig:
+        arguments:
+            $packeteryConfig: "%packetery_config%"
+
+    Shopsys\FrameworkBundle\Component\Packetery\PacketeryClient: ~
+
+    Shopsys\FrameworkBundle\Component\Packetery\PacketeryRenderer: ~
+
+    Shopsys\FrameworkBundle\Model\Transfer\TransferLoggerFactory:
+        arguments:
+            - '@monolog.logger.cron'

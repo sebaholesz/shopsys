@@ -183,10 +183,6 @@ services:
     Shopsys\FrameworkBundle\Model\Order\PromoCode\CurrentPromoCodeFacade:
         alias: App\Model\Order\PromoCode\CurrentPromoCodeFacade
 
-    App\Model\Order\PromoCode\ProductPromoCodeFiller: ~
-
-    App\Model\Order\PromoCode\PromoCodeApplicableProductsTotalPriceCalculator: ~
-
     Shopsys\FrameworkBundle\Model\Customer\BillingAddressDataFactory:
         alias: App\Model\Customer\BillingAddressDataFactory
 
@@ -427,8 +423,6 @@ services:
     Shopsys\FrameworkBundle\Model\Payment\IndependentPaymentVisibilityCalculation:
         alias: App\Model\Payment\IndependentPaymentVisibilityCalculation
 
-    App\Model\Order\Preview\OrderPreviewCalculation: ~
-
     App\Model\Order\Mail\OrderMail: ~
 
     Shopsys\FrameworkBundle\Model\Order\Mail\OrderMail:
@@ -436,12 +430,6 @@ services:
 
     Shopsys\FrameworkBundle\Model\Order\Mail\OrderMailFacade:
         alias: App\Model\Order\Mail\OrderMailFacade
-
-    Shopsys\FrameworkBundle\Model\Order\Preview\OrderPreviewCalculation:
-        alias: App\Model\Order\Preview\OrderPreviewCalculation
-
-    Shopsys\FrameworkBundle\Model\Order\Preview\OrderPreviewFactory:
-        alias: App\Model\Order\Preview\OrderPreviewFactory
 
     App\Model\Product\Pricing\QuantifiedProductDiscountCalculation: ~
 
@@ -542,10 +530,6 @@ services:
     Shopsys\FrameworkBundle\Model\Advert\AdvertPositionRegistry:
         alias: App\Model\Advert\AdvertPositionRegistry
 
-    App\Model\Transfer\TransferLoggerFactory:
-        arguments:
-            - '@monolog.logger.cron'
-
     App\Component\DataBridge\BridgeConfig:
         arguments:
             $bridgeConfig: "%data_bridge_config%"
@@ -643,14 +627,6 @@ services:
     Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfigFactory:
         alias: App\Model\Product\Filter\Elasticsearch\ProductFilterConfigFactory
 
-    App\Component\Packetery\PacketeryConfig:
-        arguments:
-            $packeteryConfig: "%packetery_config%"
-
-    App\Component\Packetery\PacketeryClient: ~
-
-    App\Component\Packetery\PacketeryRenderer: ~
-
     Shopsys\FrameworkBundle\Model\Customer\DeliveryAddressDataFactory:
         alias: App\Model\Customer\DeliveryAddressDataFactory
 
@@ -736,11 +712,6 @@ services:
 
     Shopsys\FrameworkBundle\Controller\Admin\AdvertController:
         class: App\Controller\Admin\AdvertController
-
-    Shopsys\FrontendApiBundle\Component\Constraints\PaymentTransportRelationValidator:
-        class: App\FrontendApi\Model\Component\Constraints\AppPaymentTransportRelationValidator
-        tags:
-            - validator.constraint_validator
 
     Shopsys\FrameworkBundle\Model\Security\LoginAsUserFacade:
         alias: App\Model\Security\LoginAsUserFacade

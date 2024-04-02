@@ -12,6 +12,7 @@ use Shopsys\FrameworkBundle\Model\Order\PromoCode\Exception\PromoCodeNotFoundExc
 use Shopsys\FrameworkBundle\Model\Order\PromoCode\Grid\PromoCodeGridFactory;
 use Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeDataFactoryInterface;
 use Shopsys\FrameworkBundle\Model\Order\PromoCode\PromoCodeFacade;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,8 +60,9 @@ class PromoCodeController extends AdminBaseController
      * @Route("/promo-code/delete/{id}", requirements={"id" = "\d+"})
      * @CsrfProtection
      * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id): RedirectResponse
     {
         try {
             $code = $this->promoCodeFacade->getById($id)->getCode();
@@ -83,8 +85,9 @@ class PromoCodeController extends AdminBaseController
     /**
      * @Route("/promo-code/new")
      * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request): Response
     {
         $promoCodeData = $this->promoCodeDataFactory->create();
 
@@ -120,8 +123,9 @@ class PromoCodeController extends AdminBaseController
      * @Route("/promo-code/edit/{id}", requirements={"id" = "\d+"})
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param int $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request, int $id): Response
     {
         $promoCode = $this->promoCodeFacade->getById($id);
         $promoCodeData = $this->promoCodeDataFactory->createFromPromoCode($promoCode);

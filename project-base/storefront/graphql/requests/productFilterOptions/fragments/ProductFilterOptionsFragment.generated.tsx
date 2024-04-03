@@ -36,9 +36,6 @@ export type ProductFilterOptionsFragment = { __typename: 'ProductFilterOptions',
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

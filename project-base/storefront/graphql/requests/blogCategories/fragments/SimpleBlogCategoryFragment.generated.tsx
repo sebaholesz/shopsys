@@ -31,9 +31,6 @@ export type SimpleBlogCategoryFragment = { __typename: 'BlogCategory', uuid: str
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

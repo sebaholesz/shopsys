@@ -37,9 +37,6 @@ export type StoresQuery = { __typename?: 'Query', stores: { __typename: 'StoreCo
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

@@ -39,9 +39,6 @@ export type RefreshTokens = { __typename?: 'Mutation', RefreshTokens: { __typena
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

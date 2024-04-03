@@ -32,9 +32,6 @@ export type ArticleDetailFragment = { __typename: 'ArticleSite', uuid: string, s
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

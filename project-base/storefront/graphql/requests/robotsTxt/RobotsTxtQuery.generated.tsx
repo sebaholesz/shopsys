@@ -36,9 +36,6 @@ export type RobotsTxtQuery = { __typename?: 'Query', settings: { __typename?: 'S
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

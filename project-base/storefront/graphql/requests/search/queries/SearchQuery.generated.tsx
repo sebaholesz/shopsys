@@ -47,9 +47,6 @@ export type SearchQuery = { __typename?: 'Query', articlesSearch: Array<{ __type
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

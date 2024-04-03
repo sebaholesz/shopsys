@@ -32,9 +32,6 @@ export type ListedStoreConnectionFragment = { __typename: 'StoreConnection', edg
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

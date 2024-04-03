@@ -32,9 +32,6 @@ export type SimpleBlogArticleFragment = { __typename: 'BlogArticle', name: strin
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

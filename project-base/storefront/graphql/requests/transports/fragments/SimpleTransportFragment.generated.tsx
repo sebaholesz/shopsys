@@ -31,9 +31,6 @@ export type SimpleTransportFragment = { __typename: 'Transport', uuid: string, n
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

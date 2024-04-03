@@ -35,9 +35,6 @@ export type TransportWithAvailablePaymentsAndStoresFragment = { __typename: 'Tra
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

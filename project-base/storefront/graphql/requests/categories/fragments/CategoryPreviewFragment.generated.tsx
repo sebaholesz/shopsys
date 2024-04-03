@@ -32,9 +32,6 @@ export type CategoryPreviewFragment = { __typename: 'Category', uuid: string, na
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

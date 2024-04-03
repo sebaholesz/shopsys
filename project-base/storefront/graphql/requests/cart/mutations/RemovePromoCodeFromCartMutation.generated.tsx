@@ -39,9 +39,6 @@ export type RemovePromoCodeFromCartMutation = { __typename?: 'Mutation', RemoveP
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

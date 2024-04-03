@@ -39,9 +39,6 @@ export type ApplyPromoCodeToCartMutation = { __typename?: 'Mutation', ApplyPromo
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

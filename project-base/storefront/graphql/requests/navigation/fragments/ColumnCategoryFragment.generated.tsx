@@ -33,9 +33,6 @@ export type ColumnCategoryFragment = { __typename: 'Category', uuid: string, nam
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

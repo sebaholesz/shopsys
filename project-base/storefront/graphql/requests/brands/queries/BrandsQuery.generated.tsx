@@ -37,9 +37,6 @@ export type BrandsQuery = { __typename?: 'Query', brands: Array<{ __typename: 'B
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

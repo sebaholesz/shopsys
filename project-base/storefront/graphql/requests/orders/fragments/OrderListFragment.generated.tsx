@@ -33,9 +33,6 @@ export type OrderListFragment = { __typename: 'OrderConnection', totalCount: num
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

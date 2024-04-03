@@ -37,9 +37,6 @@ export type NavigationQuery = { __typename?: 'Query', navigation: Array<{ __type
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

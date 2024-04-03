@@ -33,9 +33,6 @@ export type ProductDetailFragment = { __typename: 'RegularProduct', shortDescrip
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

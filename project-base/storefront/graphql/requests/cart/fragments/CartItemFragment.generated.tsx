@@ -36,9 +36,6 @@ export type CartItemFragment = { __typename: 'CartItem', uuid: string, quantity:
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

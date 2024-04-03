@@ -37,9 +37,6 @@ export type AdvertsFragment = AdvertsFragment_AdvertCode_ | AdvertsFragment_Adve
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

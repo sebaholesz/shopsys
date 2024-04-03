@@ -35,9 +35,6 @@ export type StoreDetailFragment = { __typename: 'Store', uuid: string, slug: str
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

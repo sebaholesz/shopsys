@@ -37,9 +37,6 @@ export type CurrentCustomerUserQuery = { __typename?: 'Query', currentCustomerUs
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

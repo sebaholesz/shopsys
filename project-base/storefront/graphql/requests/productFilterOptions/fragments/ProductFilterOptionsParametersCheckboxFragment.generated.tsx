@@ -31,9 +31,6 @@ export type ProductFilterOptionsParametersCheckboxFragment = { __typename: 'Para
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

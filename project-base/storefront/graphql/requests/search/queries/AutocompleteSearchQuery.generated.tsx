@@ -47,9 +47,6 @@ export type AutocompleteSearchQuery = { __typename?: 'Query', articlesSearch: Ar
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

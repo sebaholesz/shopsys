@@ -37,9 +37,6 @@ export type NotificationBars = { __typename?: 'Query', notificationBars: Array<{
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

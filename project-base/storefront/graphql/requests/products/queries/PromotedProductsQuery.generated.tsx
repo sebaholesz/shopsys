@@ -37,9 +37,6 @@ export type PromotedProductsQuery = { __typename?: 'Query', promotedProducts: Ar
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

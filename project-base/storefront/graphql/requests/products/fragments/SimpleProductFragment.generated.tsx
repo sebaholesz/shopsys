@@ -42,9 +42,6 @@ export type SimpleProductFragment = SimpleProductFragment_MainVariant_ | SimpleP
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

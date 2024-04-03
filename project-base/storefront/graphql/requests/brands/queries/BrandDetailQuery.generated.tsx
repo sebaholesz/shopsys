@@ -41,9 +41,6 @@ export type BrandDetailQuery = { __typename?: 'Query', brand: { __typename: 'Bra
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

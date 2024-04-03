@@ -42,9 +42,6 @@ export type ListedProductFragment = ListedProductFragment_MainVariant_ | ListedP
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

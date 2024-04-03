@@ -38,9 +38,6 @@ export type OrderSentPageContentQuery = { __typename?: 'Query', orderSentPageCon
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

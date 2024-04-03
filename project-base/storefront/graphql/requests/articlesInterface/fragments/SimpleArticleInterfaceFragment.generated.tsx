@@ -37,9 +37,6 @@ export type SimpleArticleInterfaceFragment = SimpleArticleInterfaceFragment_Arti
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

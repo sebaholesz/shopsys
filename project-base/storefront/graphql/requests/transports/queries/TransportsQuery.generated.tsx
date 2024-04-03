@@ -39,9 +39,6 @@ export type TransportsQuery = { __typename?: 'Query', transports: Array<{ __type
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

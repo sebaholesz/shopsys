@@ -39,9 +39,6 @@ export type OrderDetailByHashQuery = { __typename?: 'Query', order: { __typename
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

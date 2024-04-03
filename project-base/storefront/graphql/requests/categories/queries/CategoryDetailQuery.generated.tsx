@@ -41,9 +41,6 @@ export type CategoryDetailQuery = { __typename?: 'Query', category: { __typename
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

@@ -39,9 +39,6 @@ export type RegistrationMutation = { __typename?: 'Mutation', Register: { __type
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

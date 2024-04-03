@@ -38,9 +38,6 @@ export type ContactMutation = { __typename?: 'Mutation', Contact: boolean };
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

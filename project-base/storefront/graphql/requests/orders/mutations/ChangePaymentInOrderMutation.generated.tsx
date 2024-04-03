@@ -39,9 +39,6 @@ export type ChangePaymentInOrderMutation = { __typename?: 'Mutation', ChangePaym
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

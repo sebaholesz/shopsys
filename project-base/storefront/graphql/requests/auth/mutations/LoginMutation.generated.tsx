@@ -43,9 +43,6 @@ export type LoginMutation = { __typename?: 'Mutation', Login: { __typename?: 'Lo
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

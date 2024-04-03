@@ -37,9 +37,6 @@ export type SliderItemsQuery = { __typename?: 'Query', sliderItems: Array<{ __ty
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

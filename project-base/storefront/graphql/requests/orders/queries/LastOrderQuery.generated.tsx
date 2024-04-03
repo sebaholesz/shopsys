@@ -37,9 +37,6 @@ export type LastOrderQuery = { __typename?: 'Query', lastOrder: { __typename: 'O
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

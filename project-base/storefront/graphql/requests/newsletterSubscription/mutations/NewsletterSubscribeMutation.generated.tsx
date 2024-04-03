@@ -38,9 +38,6 @@ export type NewsletterSubscribeMutation = { __typename?: 'Mutation', NewsletterS
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

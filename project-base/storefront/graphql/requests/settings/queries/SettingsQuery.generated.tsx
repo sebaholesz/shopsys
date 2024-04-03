@@ -38,9 +38,6 @@ export type SettingsQuery = { __typename?: 'Query', settings: { __typename?: 'Se
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

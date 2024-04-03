@@ -36,9 +36,6 @@ export type LogoutMutation = { __typename?: 'Mutation', Logout: boolean };
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

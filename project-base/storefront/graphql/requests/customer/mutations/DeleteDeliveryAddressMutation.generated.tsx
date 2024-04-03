@@ -39,9 +39,6 @@ export type DeleteDeliveryAddressMutation = { __typename?: 'Mutation', DeleteDel
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

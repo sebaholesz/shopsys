@@ -49,9 +49,6 @@ export type SlugQuery = { __typename?: 'Query', slug: { __typename: 'ArticleSite
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

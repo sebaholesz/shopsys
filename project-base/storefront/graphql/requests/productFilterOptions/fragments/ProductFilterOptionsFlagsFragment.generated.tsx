@@ -32,9 +32,6 @@ export type ProductFilterOptionsFlagsFragment = { __typename: 'FlagFilterOption'
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

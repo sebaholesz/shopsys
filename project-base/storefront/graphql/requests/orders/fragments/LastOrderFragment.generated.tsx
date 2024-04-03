@@ -34,9 +34,6 @@ export type LastOrderFragment = { __typename: 'Order', pickupPlaceIdentifier: st
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

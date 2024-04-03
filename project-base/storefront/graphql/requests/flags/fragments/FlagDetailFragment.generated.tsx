@@ -34,9 +34,6 @@ export type FlagDetailFragment = { __typename: 'Flag', uuid: string, slug: strin
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

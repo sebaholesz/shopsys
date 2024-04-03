@@ -31,9 +31,6 @@ export type ImageFragment = { __typename: 'Image', name: string | null, url: str
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

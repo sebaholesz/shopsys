@@ -33,9 +33,6 @@ export type ListedBlogArticleFragment = { __typename: 'BlogArticle', uuid: strin
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

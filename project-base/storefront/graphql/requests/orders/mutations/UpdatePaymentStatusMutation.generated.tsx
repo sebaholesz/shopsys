@@ -39,9 +39,6 @@ export type UpdatePaymentStatusMutation = { __typename?: 'Mutation', UpdatePayme
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

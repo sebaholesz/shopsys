@@ -37,9 +37,6 @@ export type PromotedCategoriesQuery = { __typename?: 'Query', promotedCategories
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

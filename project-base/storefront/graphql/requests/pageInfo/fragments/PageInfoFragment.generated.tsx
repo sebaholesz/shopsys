@@ -31,9 +31,6 @@ export type PageInfoFragment = { __typename: 'PageInfo', hasNextPage: boolean, h
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

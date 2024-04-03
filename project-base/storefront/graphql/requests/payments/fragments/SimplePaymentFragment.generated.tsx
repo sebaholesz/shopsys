@@ -33,9 +33,6 @@ export type SimplePaymentFragment = { __typename: 'Payment', uuid: string, name:
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

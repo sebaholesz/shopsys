@@ -36,9 +36,6 @@ export type PrivacyPolicyArticleUrlQuery = { __typename?: 'Query', privacyPolicy
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

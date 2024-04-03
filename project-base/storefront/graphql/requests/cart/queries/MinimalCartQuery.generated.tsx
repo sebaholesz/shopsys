@@ -38,9 +38,6 @@ export type MinimalCartQuery = { __typename?: 'Query', cart: { __typename?: 'Car
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

@@ -39,9 +39,6 @@ export type OrderDetailQuery = { __typename?: 'Query', order: { __typename: 'Ord
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

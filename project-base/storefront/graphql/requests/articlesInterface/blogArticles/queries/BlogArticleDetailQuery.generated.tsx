@@ -39,9 +39,6 @@ export type BlogArticleDetailQuery = { __typename?: 'Query', blogArticle: { __ty
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

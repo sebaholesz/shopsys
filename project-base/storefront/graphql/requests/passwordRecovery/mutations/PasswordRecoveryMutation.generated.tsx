@@ -38,9 +38,6 @@ export type PasswordRecoveryMutation = { __typename?: 'Mutation', RequestPasswor
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

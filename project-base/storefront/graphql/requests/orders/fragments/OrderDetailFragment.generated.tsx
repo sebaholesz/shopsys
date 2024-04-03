@@ -33,9 +33,6 @@ export type OrderDetailFragment = { __typename: 'Order', uuid: string, number: s
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

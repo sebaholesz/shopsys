@@ -36,9 +36,6 @@ export type TermsAndConditionsArticleUrlQuery = { __typename?: 'Query', termsAnd
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

@@ -31,9 +31,6 @@ export type SeoSettingFragment = { __typename: 'SeoSetting', title: string, titl
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

@@ -43,9 +43,6 @@ export type PersonalDataDetailQuery = { __typename?: 'Query', accessPersonalData
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

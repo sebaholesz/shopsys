@@ -31,9 +31,6 @@ export type CartPromoCodeModificationsFragment = { __typename: 'CartPromoCodeMod
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

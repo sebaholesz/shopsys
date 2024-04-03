@@ -39,9 +39,6 @@ export type ProductsByCatnums = { __typename?: 'Query', productsByCatnums: Array
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

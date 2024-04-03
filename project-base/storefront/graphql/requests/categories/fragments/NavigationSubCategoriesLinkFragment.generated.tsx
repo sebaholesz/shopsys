@@ -31,9 +31,6 @@ export type NavigationSubCategoriesLinkFragment = { __typename: 'Category', uuid
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

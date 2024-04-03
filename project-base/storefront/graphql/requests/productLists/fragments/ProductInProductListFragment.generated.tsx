@@ -39,9 +39,6 @@ export type ProductInProductListFragment = ProductInProductListFragment_MainVari
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

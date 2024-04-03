@@ -38,9 +38,6 @@ export type OrderPaymentFailedContentQuery = { __typename?: 'Query', orderPaymen
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

@@ -32,9 +32,6 @@ export type NotificationBarsFragment = { __typename: 'NotificationBar', text: st
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

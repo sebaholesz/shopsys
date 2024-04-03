@@ -31,9 +31,6 @@ export type SimpleBrandFragment = { __typename: 'Brand', name: string, slug: str
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

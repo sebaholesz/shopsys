@@ -31,9 +31,6 @@ export type TokenFragments = { __typename?: 'Token', accessToken: string, refres
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

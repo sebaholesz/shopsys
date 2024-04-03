@@ -32,9 +32,6 @@ export type ListedProductConnectionPreviewFragment = { __typename: 'ProductConne
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

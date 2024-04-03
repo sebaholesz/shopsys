@@ -31,9 +31,6 @@ export type OpeningHoursFragment = { __typename?: 'OpeningHours', isOpen: boolea
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

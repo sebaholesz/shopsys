@@ -40,9 +40,6 @@ export type AddToCartMutation = { __typename?: 'Mutation', AddToCart: { __typena
       "Store",
       "Variant"
     ],
-    "CartInterface": [
-      "Cart"
-    ],
     "CustomerUser": [
       "CompanyCustomerUser",
       "RegularCustomerUser"

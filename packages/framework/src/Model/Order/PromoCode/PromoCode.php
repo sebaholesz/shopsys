@@ -34,12 +34,6 @@ class PromoCode
     protected $code;
 
     /**
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    protected $identifier;
-
-    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -97,7 +91,6 @@ class PromoCode
     protected function setData(PromoCodeData $promoCodeData): void
     {
         $this->code = $promoCodeData->code;
-        $this->identifier = $promoCodeData->identifier;
         $this->discountType = $promoCodeData->discountType;
         $this->domainId = $promoCodeData->domainId;
         $this->datetimeValidFrom = $promoCodeData->datetimeValidFrom;
@@ -120,14 +113,6 @@ class PromoCode
     public function getCode()
     {
         return $this->code;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return $this->identifier;
     }
 
     /**

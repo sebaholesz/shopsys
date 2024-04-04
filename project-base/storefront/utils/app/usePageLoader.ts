@@ -8,6 +8,7 @@ export const usePageLoader = () => {
     const updatePageLoadingState = useSessionStore((s) => s.updatePageLoadingState);
 
     const onRouteChangeStart = (_targetUrl: string, { shallow }: { shallow: boolean }) => {
+        updatePageLoadingState({ hadClientSideNavigation: true });
         if (!shallow) {
             Nprogress.start();
         }

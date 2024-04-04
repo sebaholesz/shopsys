@@ -1,18 +1,61 @@
-import { SkeletonPageArticle } from './SkeletonPageArticle';
-import { SkeletonPageBlogCategory } from './SkeletonPageBlogCategory';
-import { SkeletonPageComparison } from './SkeletonPageComparison';
-import { SkeletonPageHome } from './SkeletonPageHome';
-import { SkeletonPageOrder } from './SkeletonPageOrder';
-import { SkeletonPageOrders } from './SkeletonPageOrders';
-import { SkeletonPageProductDetail } from './SkeletonPageProductDetail';
-import { SkeletonPageProductDetailMainVariant } from './SkeletonPageProductDetailMainVariant';
-import { SkeletonPageProductsList } from './SkeletonPageProductsList';
-import { SkeletonPageProductsListSimple } from './SkeletonPageProductsListSimple';
-import { SkeletonPageStore } from './SkeletonPageStore';
-import { SkeletonPageStores } from './SkeletonPageStores';
-import { SkeletonPageWishlist } from './SkeletonPageWishlist';
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { useSessionStore } from 'store/useSessionStore';
+
+const SkeletonPageArticle = dynamic(
+    () => import('./SkeletonPageArticle').then((component) => component.SkeletonPageArticle),
+    { ssr: false },
+);
+const SkeletonPageBlogCategory = dynamic(
+    () => import('./SkeletonPageBlogCategory').then((component) => component.SkeletonPageBlogCategory),
+    { ssr: false },
+);
+const SkeletonPageComparison = dynamic(
+    () => import('./SkeletonPageComparison').then((component) => component.SkeletonPageComparison),
+    { ssr: false },
+);
+const SkeletonPageHome = dynamic(() => import('./SkeletonPageHome').then((component) => component.SkeletonPageHome), {
+    ssr: false,
+});
+const SkeletonPageOrder = dynamic(
+    () => import('./SkeletonPageOrder').then((component) => component.SkeletonPageOrder),
+    { ssr: false },
+);
+const SkeletonPageOrders = dynamic(
+    () => import('./SkeletonPageOrders').then((component) => component.SkeletonPageOrders),
+    { ssr: false },
+);
+const SkeletonPageProductDetail = dynamic(
+    () => import('./SkeletonPageProductDetail').then((component) => component.SkeletonPageProductDetail),
+    { ssr: false },
+);
+const SkeletonPageProductDetailMainVariant = dynamic(
+    () =>
+        import('./SkeletonPageProductDetailMainVariant').then(
+            (component) => component.SkeletonPageProductDetailMainVariant,
+        ),
+    { ssr: false },
+);
+const SkeletonPageProductsList = dynamic(
+    () => import('./SkeletonPageProductsList').then((component) => component.SkeletonPageProductsList),
+    { ssr: false },
+);
+const SkeletonPageProductsListSimple = dynamic(
+    () => import('./SkeletonPageProductsListSimple').then((component) => component.SkeletonPageProductsListSimple),
+    { ssr: false },
+);
+const SkeletonPageStore = dynamic(
+    () => import('./SkeletonPageStore').then((component) => component.SkeletonPageStore),
+    { ssr: false },
+);
+const SkeletonPageStores = dynamic(
+    () => import('./SkeletonPageStores').then((component) => component.SkeletonPageStores),
+    { ssr: false },
+);
+const SkeletonPageWishlist = dynamic(
+    () => import('./SkeletonPageWishlist').then((component) => component.SkeletonPageWishlist),
+    { ssr: false },
+);
 
 type SkeletonManagerProps = {
     isFetchingData?: boolean;

@@ -1,8 +1,7 @@
-import { Breadcrumbs } from './Breadcrumbs/Breadcrumbs';
-import { Footer } from './Footer/Footer';
-import { NewsletterForm } from './Footer/NewsletterForm';
+import { DeferredFooter } from './Footer/DeferredFooter';
+import { DeferredNewsletterForm } from './Footer/DeferredNewsletterForm';
 import { Header } from './Header/Header';
-import { Navigation } from './Header/Navigation/Navigation';
+import { DeferredNavigation } from './Header/Navigation/DeferredNavigation';
 import { NotificationBars } from './NotificationBars/NotificationBars';
 import { Webline } from './Webline/Webline';
 import { SeoMeta } from 'components/Basic/Head/SeoMeta';
@@ -10,9 +9,12 @@ import { Adverts } from 'components/Blocks/Adverts/Adverts';
 import { SkeletonManager } from 'components/Blocks/Skeleton/SkeletonManager';
 import { TypeBreadcrumbFragment } from 'graphql/requests/breadcrumbs/fragments/BreadcrumbFragment.generated';
 import { TypeHreflangLink } from 'graphql/types';
+import dynamic from 'next/dynamic';
 import { useSessionStore } from 'store/useSessionStore';
 import { FriendlyPagesTypesKey } from 'types/friendlyUrl';
 import { CanonicalQueryParameters } from 'utils/seo/generateCanonicalUrl';
+
+const Breadcrumbs = dynamic(() => import('./Breadcrumbs/Breadcrumbs').then((component) => component.Breadcrumbs));
 
 type CommonLayoutProps = {
     title?: string | null;
@@ -49,7 +51,7 @@ export const CommonLayout: FC<CommonLayoutProps> = ({
 
             <Webline className="relative mb-8" type="colored">
                 <Header />
-                <Navigation />
+                <DeferredNavigation />
             </Webline>
 
             <Adverts withGapBottom withWebline positionName="header" />
@@ -67,11 +69,11 @@ export const CommonLayout: FC<CommonLayoutProps> = ({
             <Adverts withGapBottom withGapTop withWebline positionName="footer" />
 
             <Webline type="light">
-                <NewsletterForm />
+                <DeferredNewsletterForm />
             </Webline>
 
             <Webline type="dark">
-                <Footer />
+                <DeferredFooter />
             </Webline>
         </>
     );

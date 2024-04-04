@@ -1,9 +1,11 @@
-import { AutocompleteSearch } from './AutocompleteSearch/AutocompleteSearch';
-import { Cart } from './Cart/Cart';
-import { HeaderContact } from './Contact/HeaderContact';
+import { DeferredAutocompleteSearch } from './AutocompleteSearch/DeferredAutocompleteSearch';
+import { DeferredCart } from './Cart/DeferredCart';
 import { Logo } from './Logo/Logo';
-import { MenuIconic } from './MenuIconic/MenuIconic';
-import { MobileMenu } from './MobileMenu/MobileMenu';
+import { DeferredMenuIconic } from './MenuIconic/DeferredMenuIconic';
+import { DeferredMobileMenu } from './MobileMenu/DeferredMobileMenu';
+import dynamic from 'next/dynamic';
+
+const HeaderContact = dynamic(() => import('./Contact/HeaderContact').then((component) => component.HeaderContact));
 
 type HeaderProps = {
     simpleHeader?: boolean;
@@ -18,19 +20,10 @@ export const Header: FC<HeaderProps> = ({ simpleHeader }) => {
                 <HeaderContact />
             ) : (
                 <>
-                    <div className="order-6 h-12 w-full transition lg:relative lg:order-4 lg:w-full vl:order-2 vl:flex-1">
-                        <AutocompleteSearch />
-                    </div>
-
-                    <div className="order-2 flex">
-                        <MenuIconic />
-                    </div>
-
-                    <div className="order-4 ml-3 flex cursor-pointer items-center justify-center text-lg lg:hidden">
-                        <MobileMenu />
-                    </div>
-
-                    <Cart className="order-3 vl:order-4" />
+                    <DeferredAutocompleteSearch />
+                    <DeferredMenuIconic />
+                    <DeferredMobileMenu />
+                    <DeferredCart />
                 </>
             )}
         </div>
